@@ -1,0 +1,39 @@
+/* ---------- 底部面板：彈簧滑入、俐落收回 ---------- */
+html:not([data-motion=reduce]) #layer>.sheet,html:not([data-motion=reduce]) #layer>.sheet.community-sheet,html:not([data-motion=reduce]) #layer>.sheet.resident-picker-sheet{
+ --sheet-distance:84px;transform:translate3d(0,var(--sheet-distance),0) scale(.965);transform-origin:50% 100%;
+ transition:transform .56s cubic-bezier(.17,1.12,.3,1),opacity .2s ease;box-shadow:0 -12px 36px -8px rgba(90,58,28,.2),0 34px 0 0 var(--surface)}
+html:not([data-motion=reduce]) #layer>.sheet.open,html:not([data-motion=reduce]) #layer>.sheet.community-sheet.open,html:not([data-motion=reduce]) #layer>.sheet.resident-picker-sheet.open{transform:translate3d(0,0,0) scale(1);opacity:1}
+html:not([data-motion=reduce]) #layer>.sheet[data-closing]{transform:translate3d(0,var(--sheet-exit-y,64px),0) scale(.97);opacity:0;transition:transform .19s cubic-bezier(.55,0,.85,.35),opacity .17s ease-in}
+html:not([data-motion=reduce]) #layer>.sheet.under{transform:translate3d(0,-6px,0) scale(.96)!important;opacity:0!important;transition:transform .3s cubic-bezier(.2,.8,.3,1),opacity .2s ease!important}
+html[data-theme=dark]:not([data-motion=reduce]) #layer>.sheet{box-shadow:0 -12px 36px -8px rgba(0,7,14,.4),0 34px 0 0 var(--surface)}
+#layer>.scrim{transition:opacity .3s ease!important}
+#layer>.sheet[data-closing]~.scrim,#layer>.scrim:not(.open){transition-duration:.18s!important}
+#layer>.sheet .sh-title::before{transform-origin:20% 80%}
+html:not([data-motion=reduce]) #layer>.sheet.open .sh-title::before{animation:isleLeaf .9s cubic-bezier(.3,1.6,.5,1) .12s backwards}
+@keyframes isleLeaf{from{transform:rotate(-70deg) scale(.2);opacity:0}}
+
+/* ---------- 島嶼手機（抽屜）：從按鈕彈出 ---------- */
+html:not([data-motion=reduce]) #hudRail .rail-ext{transform-origin:calc(100% - 20px) -12px}
+html:not([data-motion=reduce]) #hudRail:not(.open) .rail-ext{transform:translate3d(0,-12px,0) scale(.8)!important;transition:transform .18s cubic-bezier(.55,0,.8,.3),opacity .15s ease,visibility 0s .18s!important}
+html:not([data-motion=reduce]) #hudRail.open .rail-ext{transform:none!important;transition:transform .52s cubic-bezier(.2,1.28,.34,1),opacity .16s ease,visibility 0s!important}
+html:not([data-motion=reduce]) #hudRail.open .rail-ext .rail-btn{animation:isleTile .5s cubic-bezier(.22,1.5,.4,1) backwards;animation-delay:calc(70ms + var(--k,0) * 28ms)}
+html:not([data-motion=reduce]) #hudRail.open .hub-heading{animation:isleFadeUp .4s ease backwards .04s}
+@keyframes isleTile{from{opacity:0;transform:translate3d(0,12px,0) scale(.6)}}
+@keyframes isleFadeUp{from{opacity:0;transform:translate3d(0,6px,0)}}
+
+/* ---------- 陪伴鍵選單 ---------- */
+html:not([data-motion=reduce]) #fab.open .qa-pill{animation:islePill .44s cubic-bezier(.22,1.45,.4,1) backwards;animation-delay:calc(var(--k,0) * 30ms)}
+@keyframes islePill{from{opacity:0;transform:translate3d(-14px,8px,0) scale(.7)}}
+html:not([data-motion=reduce]) #fab .qa-main{transition:transform .38s cubic-bezier(.3,1.6,.5,1),background-color .2s}
+html:not([data-motion=reduce]) #fab.open #qaToggle{transform:rotate(-12deg) scale(1.06)}
+
+/* ---------- 底部導覽：黃色指示器帶彈性 ---------- */
+html:not([data-motion=reduce]) #navInd{transition:left .5s cubic-bezier(.3,1.35,.45,1),width .42s cubic-bezier(.3,1.25,.45,1),opacity .16s ease!important}
+html:not([data-motion=reduce]) #nav .nav-btn.on svg{animation:isleNavPop .55s cubic-bezier(.3,1.7,.5,1)}
+@keyframes isleNavPop{0%{transform:scale(.7) rotate(-10deg)}60%{transform:scale(1.14) rotate(4deg)}100%{transform:none}}
+
+/* ---------- 設定等全頁面板 ---------- */
+html:not([data-motion=reduce]) .ovp{transition:opacity .24s ease,transform .56s cubic-bezier(.18,1.05,.3,1),visibility 0s .56s!important}
+html:not([data-motion=reduce]) .ovp.open{transition:opacity .24s ease,transform .56s cubic-bezier(.18,1.05,.3,1),visibility 0s!important}
+
+html[data-motion=reduce] .isle-think,html[data-motion=reduce] .isle-wfx{display:none}

@@ -1,0 +1,33 @@
+/* ===== 3.2 效能與穩定性 ===== */
+/* 白天沒有星星與螢火蟲時，不讓上百個閃爍動畫在背景空轉 */
+.stage[data-st="0"] .stars{visibility:hidden}.stage[data-st="0"] .stars i,.stage[data-st="0"] .stars::before,.stage[data-st="0"] .stars::after{animation-play-state:paused!important}
+.stage[data-ff="0"] .ffly{visibility:hidden}.stage[data-ff="0"] .ffly i{animation-play-state:paused!important}
+/* 底部導覽列：取消在動態場景上即時模糊（每一格都要重算），改用不透明的毛玻璃色 */
+.nav{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:color-mix(in srgb,var(--surface) 94%,transparent)!important}
+.toast.glass,.dghost{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+.toast.glass{background:color-mix(in srgb,var(--surface) 96%,transparent)!important}
+.l31-q,.l31-photo-bar{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:var(--surface)!important}
+/* 角色身上的濾鏡會讓每一格動畫都重新套用濾鏡 → 移除（顏色差異極小） */
+#homeStage .actor .adj>svg.oc-svg{filter:none!important}
+.actor[data-mood=tired] .art,.actor[data-mood=sad] .art{filter:none!important;opacity:.96}
+.mini-art{filter:none}
+/* 數字與時鐘不跳動 */
+#isleClock b,#isleClock small{font-variant-numeric:tabular-nums}
+#isleClock small{min-width:9.5em}
+/* 大面積 SVG 內的動畫會讓整張地面／背景每一格重畫 → 改為靜態（小型物件的動畫保留） */
+.isle-ground .foam,.isle-ground .foam2{animation:none!important}
+.oc-cam-plane>svg .sw,.stage>svg .sw,.stage .scene .sw{animation:none!important}
+/* 草叢搖擺：保留三分之一，畫面仍有生氣，但合成圖層數大幅減少 */
+.isle-tuft.sway:nth-child(3n+2),.isle-tuft.sway:nth-child(3n){animation:none!important}
+.l30-qtabs .dot[hidden]{display:none!important}
+.tls-cd{font-variant-numeric:tabular-nums}
+/* 佈置模式：其他夥伴不再瞬間消失（原本會閃一下），改為淡淡地留在原地、不可點擊 */
+body.oc-edit .community-guest{visibility:visible!important;opacity:.5;pointer-events:none!important;transition:opacity .35s ease}
+.community-guest{transition:opacity .35s ease}
+/* 佈置模式中的小島擺設 */
+body.p32-props .isle-prop[data-mv]{cursor:grab}
+body.p32-props .isle-prop[data-mv]::after{content:"";position:absolute;left:8%;right:8%;bottom:-4px;height:10px;border-radius:50%;border:2px dashed color-mix(in srgb,var(--accent) 70%,#fff);opacity:.75;pointer-events:none}
+.isle-prop.p32-drag{filter:drop-shadow(0 8px 10px rgba(40,30,10,.28));scale:1.04;transition:scale .15s}
+.isle-prop.p32-bad{filter:drop-shadow(0 0 6px rgba(230,80,60,.8)) grayscale(.3)}
+.p32-ring{position:absolute;left:50%;top:-10px;translate:-50% -100%;pointer-events:none;font-style:normal}
+.p32-ring b{display:block;padding:4px 10px;border-radius:10px;background:var(--surface);color:var(--ink);font-size:11px;font-weight:850;white-space:nowrap;box-shadow:0 0 0 1.5px var(--line),0 4px 10px rgba(0,0,0,.12)}

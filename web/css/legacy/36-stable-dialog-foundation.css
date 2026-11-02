@@ -1,0 +1,12 @@
+/* Keep one compositor layer throughout opening, reading, scrolling and closing.
+   svh prevents browser-chrome expansion from resizing a visible mobile dialog. */
+#layer>.sheet{backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform;transform:translate3d(0,20px,0);transform-origin:50% 100%;opacity:0;transition:transform .26s cubic-bezier(.2,.75,.3,1),opacity .18s ease;animation:none!important;filter:none;backdrop-filter:none;-webkit-backdrop-filter:none;max-height:calc(100svh - var(--sat) - 16px);min-height:0;isolation:isolate}
+#layer>.sheet.open{transform:translate3d(0,0,0);opacity:1}
+#layer>.sheet[data-closing]{transition:transform .2s ease-in,opacity .16s ease-in;pointer-events:none}
+#layer>.sheet.stable-list-sheet{height:min(76svh,700px);min-height:0!important}
+#layer>.sheet>.sh-body{min-height:0;overscroll-behavior:contain;overflow-anchor:none;scrollbar-gutter:stable}
+#layer>.sheet.stable-list-sheet>.sh-body{flex:1;max-height:none}
+#layer>.sheet .community-avatar{contain:layout paint}
+#layer>.scrim{backdrop-filter:none;-webkit-backdrop-filter:none;transition:opacity .2s ease;will-change:opacity}
+.ovp.open{transform:translate3d(0,0,0)}
+html[data-motion=reduce] #layer>.sheet,html[data-motion=reduce] #layer>.scrim{transition:none!important}

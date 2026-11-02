@@ -1,0 +1,55 @@
+/* joint positions measured in 240 × 260 cat coordinate system */
+.cat-ref-v2 .head-g{transform-box:view-box;transform-origin:120px 176px}
+.cat-ref-v2 .body-g{transform-box:view-box;transform-origin:120px 217px}
+.cat-ref-v2 .al{transform-box:view-box;transform-origin:94px 190px}
+.cat-ref-v2 .ar{transform-box:view-box;transform-origin:146px 190px}
+.cat-ref-v2 .fl{transform-box:view-box;transform-origin:104px 226px}
+.cat-ref-v2 .fr{transform-box:view-box;transform-origin:135px 226px}
+.cat-ref-v2 .tail-side{transform-box:view-box;transform-origin:0px 0px}
+.cat-ref-v2 .tail-side .tail{transform-box:view-box;transform-origin:148px 216px;animation:catTailIdle 3.1s ease-in-out infinite}
+.cat-ref-v2 .tail-side .tail-tip{transform-box:view-box;transform-origin:196px 222px;animation:catTailTip 2.5s ease-in-out infinite}
+@keyframes catTailTip{0%,100%{transform:rotate(0deg)}36%{transform:rotate(7deg)}72%{transform:rotate(-5deg)}}
+.actor[data-state=walk] .cat-ref-v2 .tail-tip{animation:catTailTipWalk var(--wk,.58s) ease-in-out infinite}
+@keyframes catTailTipWalk{0%,100%{transform:rotate(5deg)}50%{transform:rotate(-6deg)}}
+.actor[data-state=walk][data-ph=run] .cat-ref-v2 .tail-tip{animation-duration:var(--wk,.42s)}
+.actor[data-state=sleep] .cat-ref-v2 .tail-tip{animation-duration:6s}
+@keyframes catTailIdle{0%,100%{transform:rotate(-7deg)}28%{transform:rotate(8deg)}55%{transform:rotate(13deg)}78%{transform:rotate(1deg)}}
+.actor[data-state=walk] .cat-ref-v2 .tail-side .tail{animation:catTailWalk var(--wk,.58s) ease-in-out infinite}
+@keyframes catTailWalk{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(15deg)}}
+.actor[data-state=walk][data-ph=run] .cat-ref-v2 .tail-side .tail{animation:catTailRun var(--wk,.42s) ease-in-out infinite}
+@keyframes catTailRun{0%,100%{transform:rotate(-15deg)}50%{transform:rotate(18deg)}}
+.actor[data-state=happy] .cat-ref-v2 .tail-side .tail,.actor[data-beh=wiggle] .cat-ref-v2 .tail-side .tail{animation:catTailHappy .36s ease-in-out infinite}
+@keyframes catTailHappy{0%,100%{transform:rotate(-13deg)}50%{transform:rotate(19deg)}}
+.actor[data-state=sleep] .cat-ref-v2 .tail-side .tail{animation:catTailSleep 5.2s ease-in-out infinite}
+@keyframes catTailSleep{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(4deg)}}
+.actor[data-state=walk] .cat-ref-v2 .fl{animation:catStepLeft var(--wk,.58s) ease-in-out infinite}
+.actor[data-state=walk] .cat-ref-v2 .fr{animation:catStepRight var(--wk,.58s) ease-in-out infinite}
+@keyframes catStepLeft{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-4px) rotate(7deg)}}
+@keyframes catStepRight{0%,100%{transform:translateY(-4px) rotate(7deg)}50%{transform:translateY(0) rotate(-5deg)}}
+.actor[data-state=walk] .cat-ref-v2 .al{animation:catArmLeft var(--wk,.58s) ease-in-out infinite}
+.actor[data-state=walk] .cat-ref-v2 .ar{animation:catArmRight var(--wk,.58s) ease-in-out infinite}
+@keyframes catArmLeft{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(11deg)}}
+@keyframes catArmRight{0%,100%{transform:rotate(11deg)}50%{transform:rotate(-8deg)}}
+/* Touch targets always visible but unobtrusive on preview; the entire body doesn't steal gestures. */
+.qk-prev,.cat-place-large{position:relative}
+.cat-place-handle{position:absolute;z-index:24;left:50%;top:50%;width:38px;height:38px;border-radius:50%;background:color-mix(in srgb,var(--accent) 84%,white);color:var(--on-accent);border:3px solid var(--surface);box-shadow:0 3px 12px #31304a35;display:grid;place-items:center;font-size:20px;font-weight:900;transform:translate(-50%,-50%);touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
+.cat-place-handle.drag{cursor:grabbing;transform:translate(-50%,-50%) scale(1.13);box-shadow:0 2px 20px var(--accent-glow)}
+.cat-position-actions{display:flex;flex-direction:column;gap:8px;align-items:flex-start;margin-top:13px}
+.cat-position-actions small{font-size:12px;line-height:1.55;color:var(--ink-2)}
+.cat-position-btn{min-height:44px;padding:0 16px;border-radius:14px}
+.cat-position-btn:disabled{opacity:.5}
+.cat-place-sheet{display:flex;flex-direction:column;gap:12px}
+.cat-place-sheet h3{font-size:18px;margin:0}
+.cat-place-sub{font-size:13px;color:var(--ink-2);line-height:1.5;margin:0}
+.cat-place-large{height:min(42vh,320px);min-height:216px;max-width:420px;width:100%;align-self:center;border-radius:23px;background:var(--accent-soft);overflow:hidden;box-shadow:inset 0 0 0 1px var(--line)}
+.cat-place-large .thumb{position:absolute;inset:0}
+.cat-place-large .thumb *{animation:none!important}
+.cat-place-large .cat-place-handle{width:44px;height:44px}
+.cat-place-tuners{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cat-place-tuners label{font-size:12px;color:var(--ink-2);font-weight:700;min-width:0}
+.cat-place-tuners output{float:right;font-variant-numeric:tabular-nums}
+.cat-place-tuners input{width:100%;display:block;accent-color:var(--accent);height:36px;touch-action:pan-x}
+.cat-place-bottom{display:flex;gap:8px}
+.cat-place-bottom .btn{flex:1;min-width:0;padding:0 6px;font-size:12px}
+@media(max-width:360px){.cat-place-sheet{gap:8px}.cat-place-large{min-height:200px;height:34vh}.cat-place-bottom .btn{font-size:11px}}
+html[data-motion=reduce] .cat-ref-v2 .tail-side :is(.tail,.tail-tip){animation:none!important}

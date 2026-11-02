@@ -1,0 +1,26 @@
+/* Transparent targets preserve the visible component dimensions. */
+.res::before,.hud-quest::after,button.sw::before,.nx-sw::before,#hudRail>.rail-btn::after,#nav .nav-btn::before{
+ content:'';position:absolute;inset:auto;left:50%;top:50%;width:max(100%,44px);height:max(100%,44px);transform:translate(-50%,-50%);border-radius:inherit;background:transparent;pointer-events:auto;
+}
+button.sw,.nx-sw{position:relative;overflow:visible}
+button.sw{animation:none;transform:none;transform-origin:center}
+.hud-cap.open .ext-in{overflow:visible;column-gap:10px;row-gap:12px;padding-top:12px;padding-bottom:10px}
+#nav .nav-btn{overflow:visible}
+#p-home.idle .hud-top,#p-home.idle .hud-rail,#p-home.idle .hud-qa,#p-home.idle .hud-quest{opacity:.64}
+#p-home.idle #hudRail.open,#p-home.idle #fab.open{opacity:1}
+.toast{pointer-events:none!important;user-select:none;width:max-content;max-width:min(400px,calc(100% - 24px));overflow-wrap:anywhere}
+:is(button,a[href],input,select,textarea,[role=button],[tabindex]):focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+#nav .nav-btn:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+:is(input,textarea,select):focus-visible{outline-offset:1px}
+@media(min-width:700px){
+ .page:not(#p-home)>.scroll,.ovp>.scroll{left:0;right:0;width:min(100%,760px);max-width:760px;margin-inline:auto}
+ #nav{max-width:330px}
+ #anim>.an-top,#anim>.an-prev,#anim>.an-ctl,#anim>.an-tabs,#anim>.an-panel{width:min(100%,760px);margin-inline:auto}
+}
+@media(orientation:landscape) and (max-height:520px){
+ #nav,#nav.nx-few{max-width:min(300px,calc(var(--n,6)*48px + 16px))!important;height:42px;bottom:calc(var(--sab) + 4px);border-radius:22px}
+ #hudRail.open .rail-ext{max-height:calc(100dvh - var(--sat) - var(--sab) - 122px)!important}
+ #nav .nav-btn{min-height:0}
+ #nav.nx-lab{height:54px}
+ #nav .nav-btn svg{width:20px;height:20px}
+}

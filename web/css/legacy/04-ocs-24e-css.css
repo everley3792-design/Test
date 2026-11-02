@@ -1,0 +1,16 @@
+.ocp-layer{position:absolute;inset:0;pointer-events:none;z-index:40}
+.ocp{position:absolute;pointer-events:none;line-height:1;animation:ocpFly var(--dur,1s) ease-out forwards;font-size:var(--sz,12px);will-change:transform,opacity}
+.ocp.dot{width:var(--sz);height:var(--sz);border-radius:50%;background:var(--bg)}
+.ocp.bub{width:var(--sz);height:var(--sz);border-radius:50%;border:1.5px solid rgba(255,255,255,.95);background:rgba(255,255,255,.35)}
+.ocp.st{color:rgba(150,150,170,.75);animation-name:ocpSteam;font-weight:800}
+@keyframes ocpFly{0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}15%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(var(--rot,0deg)) scale(1)}}
+@keyframes ocpSteam{0%{opacity:0;transform:translate(-50%,-50%) scale(.6)}25%{opacity:.9}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.4)}}
+.opl{position:absolute;z-index:41;font-size:30px;line-height:1;pointer-events:none;will-change:transform,opacity;opacity:0;transform:translate(-50%,-100%)}
+.opl img{width:34px;height:34px;object-fit:contain;display:block}
+.a-tilt.pl-look{animation:plLook 1.1s ease-in-out both}@keyframes plLook{0%{rotate:0deg}30%{rotate:-4deg;translate:2px 1px}60%{rotate:4deg;translate:-2px 1px}100%{rotate:0deg;translate:0 0}}
+.a-tilt.pl-up{animation:plUp 1.5s ease-in-out both}@keyframes plUp{0%{rotate:0deg}25%,80%{rotate:-6deg;translate:0 -2px}100%{rotate:0deg;translate:0 0}}
+.a-tilt.pl-sway{animation:plSway .9s ease-in-out 3}@keyframes plSway{0%,100%{rotate:0deg}25%{rotate:4deg;translate:2px 0}75%{rotate:-4deg;translate:-2px 0}}
+.a-tilt.pl-shy{animation:plShy .9s ease-in-out both}@keyframes plShy{0%{rotate:0deg}40%{rotate:6deg;translate:3px 3px}100%{rotate:0deg;translate:0 0}}
+.a-pose.pl-hug{animation:plHug 1.8s ease-in-out both}@keyframes plHug{0%,100%{scale:1}30%{scale:1.04 .96}60%{scale:.98 1.03}}
+.a-pose.pl-pounce{animation:plPounce .5s ease-out}@keyframes plPounce{0%{scale:1}30%{scale:1.1 .85}100%{scale:1}}
+html[data-motion=reduce] .a-tilt[class*=pl-],html[data-motion=reduce] .a-pose[class*=pl-],html[data-motion=reduce] .ocp{animation:none}

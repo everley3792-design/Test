@@ -1,0 +1,15 @@
+(()=>{'use strict';let timer=setInterval(()=>{if(!window.OCSCamera?.plane||!window.OCSCommunity?.ready)return;clearInterval(timer);const root=Home.stage.root,plane=OCSCamera.plane;
+ const surfaces=[['sky','screen-sky'],['shade','screen-shade'],['fog','screen-fog'],['glow','screen-glow']];
+ const screen=document.createElement('div');screen.id='sceneBackplate';screen.style.cssText='position:absolute;inset:0;pointer-events:none;z-index:0';
+ // The backplate belongs to the page, outside the camera relocation observer.
+ document.getElementById('p-home').insertBefore(screen,root);screen.style.zIndex='0';root.style.background='transparent';
+ const atmosphere=document.createElement('div');atmosphere.id='sceneAtmosphere';atmosphere.style.cssText='position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden';document.getElementById('p-home').append(atmosphere);
+ for(const [old,cls]of surfaces){const n=plane.querySelector(':scope>.'+old);if(!n)continue;n.classList.add(cls);(old==='sky'?screen:atmosphere).append(n)}
+ const style=document.createElement('style');style.textContent='#sceneBackplate{overflow:hidden;isolation:isolate}#sceneBackplate>.screen-sky{position:absolute;inset:-2px;background:linear-gradient(180deg,var(--sky-a),var(--sky-b) 48%,var(--sky-c) 64%,var(--floor-a) 78%,var(--floor-b))}#sceneBackplate>.screen-sky::after{display:none!important}#sceneBackplate>:is(.screen-shade,.screen-fog,.screen-glow){display:none}#homeStage{background:transparent!important}';document.head.append(style);
+ // Backplate inherits palette from the world root without transformed geometry.
+ const paint=Env.paint.bind(Env);Env.paint=function(){const result=paint();for(const key of ['--sky-a','--sky-b','--sky-c','--floor-a','--floor-b']){const value=root.style.getPropertyValue(key);if(value&&screen.style.getPropertyValue(key)!==value)screen.style.setProperty(key,value)}return result};Env.dirty=1;Env.paint();
+ const atmoStyle=document.createElement('style');atmoStyle.textContent='#sceneAtmosphere>.shade{position:absolute;inset:-2px;background:var(--shc,transparent)}#sceneAtmosphere>.glow{position:absolute;inset:-2px;background:radial-gradient(ellipse at var(--gx,50%) 24%,var(--orb-glow),transparent 65%)}#sceneAtmosphere>.fog{position:absolute;inset:-2px;background:linear-gradient(var(--fogc,transparent),var(--fogc2,transparent));opacity:var(--fog,0)}#sceneAtmosphere .fog::before,#sceneAtmosphere .fog>i{display:none}';document.head.append(atmoStyle);
+ const base=Env.paint.bind(Env);Env.paint=function(){const result=base();for(const key of ['--shc','--fog','--fogc','--fogc2','--orb-glow','--gx']){const value=root.style.getPropertyValue(key);if(atmosphere.style.getPropertyValue(key)!==value)atmosphere.style.setProperty(key,value)}return result};Env.dirty=1;
+ // Release disconnected per-character weather scenes; only real stages own skies.
+ Env.rt=Env.rt.filter(e=>e.r.isConnected);for(const stage of [...Env.st])if(!stage.root?.isConnected)Env.st.delete(stage);
+ },100)})();

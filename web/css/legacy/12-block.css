@@ -1,0 +1,62 @@
+/* ===== 2.4B 食物喜好探索 ===== */
+.tfd{position:absolute;z-index:41;font-size:30px;line-height:1;pointer-events:none;transform:translate(-50%,-50%);transition:scale .38s var(--ease),opacity .32s,translate .38s var(--ease);animation:tfdIn .56s var(--ease) both}
+.tfd img{width:34px;height:34px;object-fit:contain;display:block}
+.tfd.b1{scale:.84;translate:0 3px}.tfd.b2{scale:.56;translate:0 5px}.tfd.out{scale:.2;opacity:0}
+.tfd.no{animation:tfdNo .7s var(--ease) forwards}
+@keyframes tfdIn{0%{opacity:0;transform:translate(-50%,-210%) scale(.55)}60%{opacity:1;transform:translate(-50%,-44%) scale(1.1)}100%{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@keyframes tfdNo{0%{opacity:1;transform:translate(-50%,-50%)}35%{transform:translate(-30%,-54%) rotate(8deg)}100%{opacity:0;transform:translate(60%,-30%) rotate(24deg) scale(.7)}}
+.a-tilt.fd-look{animation:fdLook .72s var(--ease) both}
+@keyframes fdLook{0%{translate:0 0;rotate:0deg}55%{translate:3px 3px;rotate:-5deg}100%{translate:2px 2px;rotate:-3deg}}
+.a-tilt.fd-nod{animation:fdNod .6s ease-in-out}
+@keyframes fdNod{0%,100%{translate:0 0}35%{translate:0 4px}70%{translate:0 1px}}
+.a-tilt.fd-shake{animation:fdShake .72s ease-in-out}
+@keyframes fdShake{0%{translate:0 0;rotate:0deg}15%{translate:-4px 0;rotate:-6deg}35%{translate:-3px 0;rotate:6deg}55%{translate:-4px 0;rotate:-5deg}80%{translate:-2px 0;rotate:3deg}100%{translate:0 0;rotate:0deg}}
+.a-tilt.fd-shake.hard{animation-duration:.95s}
+.a-pose.fd-chew{animation:fdChew .4s ease-in-out 3}
+@keyframes fdChew{0%,100%{scale:1 1}50%{scale:1.035 .955}}
+.actor.fd-glow .art{filter:brightness(1.07) saturate(1.12) drop-shadow(0 0 7px rgba(255,205,120,.55));transition:filter .4s}
+.tsp{position:absolute;pointer-events:none;color:#F6C768;font-size:15px;line-height:1;opacity:0;text-shadow:0 0 8px rgba(255,214,130,.75);animation:tspUp 1.25s var(--ease) forwards;animation-delay:var(--d,0s)}
+.tsp.q{color:var(--accent-2);font-weight:900;font-size:19px;text-shadow:none}
+@keyframes tspUp{0%{opacity:0;transform:translate(0,6px) scale(.4) rotate(0)}25%{opacity:1}100%{opacity:0;transform:translate(var(--dx,0),-34px) scale(1) rotate(80deg)}}
+@media (prefers-reduced-motion:reduce){.tfd,.tsp{animation-duration:.01s}.a-tilt[class*=fd-],.a-pose.fd-chew{animation:none}}
+html[data-motion=reduce] .tsp,html[data-motion=reduce] .a-tilt[class*=fd-],html[data-motion=reduce] .a-pose.fd-chew{animation:none}
+/* 飲食喜好介面 */
+.tz h3{font-size:17px;font-weight:800;margin:0}
+.tz .tz-sub{font-size:12px;color:var(--ink-3);margin-top:2px}
+.tz .who{display:flex;gap:6px;overflow-x:auto;margin:10px 0 2px;padding-bottom:2px;scrollbar-width:none}
+.tz .who::-webkit-scrollbar{display:none}
+.tz-fl{height:5px;border-radius:9px;background:var(--surface-2);overflow:hidden;margin-top:8px}
+.tz-fl i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,var(--accent-2),#F6C768);transition:width .4s var(--ease)}
+.tz-seg{display:flex;gap:4px;padding:3px;border-radius:14px;background:var(--surface-2);margin-top:12px}
+.tz-seg button{flex:1;height:34px;border-radius:11px;font-size:13px;font-weight:700;color:var(--ink-2);transition:background .2s,color .2s}
+.tz-seg button.on{background:var(--accent);color:var(--on-accent);box-shadow:0 6px 14px -6px var(--accent-glow)}
+.tz-hint{font-size:12px;color:var(--ink-3);margin:7px 2px 0;line-height:1.45}
+.tz-tabs{display:flex;gap:8px;margin:12px 0 10px}
+.tz-rk{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.tz-rk>div{background:var(--surface-2);border-radius:16px;padding:9px 10px;min-width:0}
+.tz-rk h5{font-size:11.5px;font-weight:700;color:var(--ink-3);letter-spacing:.05em;margin:0 0 5px}
+.tz-rk p{display:flex;align-items:center;gap:6px;font-size:13px;margin:3px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tz-rk p span{font-size:17px}.tz-rk .none{color:var(--ink-3);font-size:12px}
+.tz-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.tz-c{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 4px 8px;border-radius:16px;background:var(--surface-2);min-width:0;transition:transform .15s var(--ease)}
+.tz-c:active{transform:scale(.96)}
+.tz-c .tz-e{font-size:26px;height:32px;display:grid;place-items:center}.tz-c .tz-e img{width:30px;height:30px;object-fit:contain}
+.tz-c b{font-size:12.5px;font-weight:700;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tz-c small{font-size:11px;color:var(--ink-2)}
+.tz-c.lv-fav{box-shadow:inset 0 0 0 1.5px rgba(246,199,104,.7)}.tz-c.lv-worst{box-shadow:inset 0 0 0 1.5px rgba(150,150,170,.45)}
+.tz-un{font-size:12px;color:var(--ink-3);text-align:center;margin:12px 0 0}
+.tz-sec{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--ink-3);margin:12px 2px 6px}
+.tz-ch{display:flex;flex-wrap:wrap;gap:6px}
+.tzc{display:inline-flex;align-items:center;gap:4px;height:34px;padding:0 11px;border-radius:99px;background:var(--surface-2);font-size:13px;font-weight:600;color:var(--ink);transition:transform .15s var(--ease),background .2s}
+.tzc:active{transform:scale(.95)}
+.tzc em{font-style:normal;font-size:11px;font-weight:800;opacity:.85}
+.tzc.s3{background:rgba(246,199,104,.28)}.tzc.s2{background:var(--accent-soft);color:var(--accent)}
+.tzc.s-2{background:rgba(242,160,172,.22)}.tzc.s-3{background:rgba(242,160,172,.4)}
+.tzc.tb{background:rgba(120,120,140,.28)}
+.tzc.ex{box-shadow:inset 0 0 0 1.2px var(--accent-soft);opacity:.9}
+.tz-act{display:flex;gap:8px;margin-top:16px}.tz-act .btn{flex:1;height:42px;font-size:13.5px}
+.tz-lv{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px}
+.tz-lv button{height:38px;border-radius:12px;background:var(--surface-2);font-size:13px;font-weight:700}
+.tz-lv button.on{background:var(--accent);color:var(--on-accent)}
+.tzb .ed-ch{margin-top:4px}
+.tz-bt{height:44px;min-width:44px}

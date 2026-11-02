@@ -1,0 +1,21 @@
+/* Small movements, clear rhythm: pages glide; controls have a playful rebound. */
+:root{--cozy-out:cubic-bezier(.18,.82,.25,1);--cozy-spring:cubic-bezier(.2,.85,.28,1.12)}
+#pages{isolation:isolate;overflow:hidden}
+#pages>.page{transition:none!important;transform:none;will-change:auto}
+#pages>.page:not(.on){visibility:hidden;opacity:0;pointer-events:none}
+#pages>.page.on{visibility:visible;opacity:1;transform:none}
+.ovp{opacity:0;transform:translate3d(16px,0,0);pointer-events:none;transition:opacity .2s ease,transform .24s var(--cozy-out),visibility 0s .24s}
+.ovp.open{opacity:1;transform:none;pointer-events:auto;transition:opacity .24s ease,transform .36s var(--cozy-out),visibility 0s}
+.ovp.drag{transition:none}
+.sheet{opacity:0;transform:translate3d(0,68px,0) scale(.975);transform-origin:50% 100%;pointer-events:none;transition:transform .42s var(--cozy-spring),opacity .2s ease}
+.sheet.open{opacity:1;transform:none;pointer-events:auto}
+.sheet[data-closing]{pointer-events:none;transition:transform .22s cubic-bezier(.4,0,1,1),opacity .18s ease}
+.scrim{backdrop-filter:none;transition:opacity .22s ease}
+#navInd{transition:left .36s var(--cozy-spring),width .32s var(--cozy-out),transform .36s var(--cozy-spring),opacity .18s ease}
+.nav-btn svg{transition:transform .24s var(--cozy-spring)}
+.nav-btn.on svg{animation:cozyNavHello .36s var(--cozy-out)}
+@keyframes cozyNavHello{0%{transform:translateY(0) scale(.94)}45%{transform:translateY(-3px) scale(1.04)}75%{transform:translateY(1px)}100%{transform:none}}
+.c4-ov{animation:cozyCanvasIn .32s var(--cozy-out)}
+@keyframes cozyCanvasIn{from{opacity:0;transform:translate3d(0,12px,0)}to{opacity:1;transform:none}}
+html[data-motion=reduce] #pages>.page,html[data-motion=reduce] .ovp,html[data-motion=reduce] .sheet,html[data-motion=reduce] .scrim,html[data-motion=reduce] #navInd{transition:none!important}
+html[data-motion=reduce] .nav-btn.on svg,html[data-motion=reduce] .c4-ov{animation:none!important}

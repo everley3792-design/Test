@@ -1,0 +1,11 @@
+/* 互動收納可拖曳 */
+.hud-qa .qa-row{position:relative;touch-action:none}
+.hud-qa .qa-more{position:absolute;left:0;bottom:calc(100% + 10px);width:max-content}
+.hud-qa .qa-pill{white-space:nowrap}
+.hud-qa.rt .qa-more{left:auto;right:0;align-items:flex-end;transform-origin:100% 100%}
+.hud-qa.dn .qa-more{bottom:auto;top:calc(100% + 10px);transform:translateY(-12px) scale(.92);transform-origin:0 0}
+.hud-qa.dn.rt .qa-more{transform-origin:100% 0}
+.hud-qa.dn.open .qa-more{transform:none}
+.hud-qa.snap{transition:opacity .7s var(--ease),left .32s var(--spring),top .32s var(--spring)!important}
+.hud-qa.drag-on #qaToggle{transform:scale(1.08);box-shadow:0 12px 24px -8px var(--accent-glow)}
+#qaToggle{touch-action:none;-webkit-user-select:none;user-select:none}

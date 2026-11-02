@@ -1,0 +1,41 @@
+/* ===== 2.4D 換裝・飾品貼附・家具佈置 ===== */
+.dr-layer{position:absolute;inset:0;pointer-events:none;container-type:size}
+.dr-b{z-index:-1}.dr-f{z-index:2}
+.dr-it{position:absolute;width:calc(var(--s)*100%);aspect-ratio:1;display:grid;place-items:center;line-height:1;font-size:calc(var(--s)*78cqw);transform:translate(-50%,-50%) rotate(var(--r)) scaleX(var(--f));transition:opacity .25s;will-change:transform}
+.dr-it img{width:100%;height:100%;object-fit:contain;display:block;-webkit-user-drag:none}
+.dr-it.hid{opacity:0}.dr-it.pop{animation:drpop .5s var(--press)}
+.dr-it.sel::after,.rm-it.sel .rm-b::after{content:"";position:absolute;inset:-6%;border:2px dashed var(--accent);border-radius:14px;animation:selp 1.6s ease-in-out infinite}
+.accessory-placed{pointer-events:all;cursor:grab;transition:filter .2s var(--ease)}
+.accessory-placed.dragging{cursor:grabbing;filter:drop-shadow(0 6px 10px rgba(0,0,0,.12))}
+@keyframes drpop{0%{scale:.5;opacity:0}60%{scale:1.14}100%{scale:1}}
+@keyframes selp{50%{opacity:.45}}
+.drsp{position:absolute;font-size:14px;color:#F6C65B;pointer-events:none;animation:drsp .9s ease-out forwards;text-shadow:0 0 6px #fff}
+@keyframes drsp{0%{transform:translate(-50%,0) scale(.3);opacity:0}30%{opacity:1}100%{transform:translate(calc(-50% + var(--dx)),-34px) scale(1);opacity:0}}
+.rm-it{position:absolute;pointer-events:none;width:calc(var(--k)*20%);aspect-ratio:1;transform:translate(-50%,-100%);will-change:left,top}
+.rm-it.act{pointer-events:auto;touch-action:manipulation}
+.rm-sh{position:absolute;left:8%;right:8%;bottom:-5%;height:16%;border-radius:50%;background:radial-gradient(closest-side,rgba(40,40,70,.34),transparent);filter:blur(1px)}
+.rm-it.flat .rm-sh{display:none}
+.rm-b{position:absolute;inset:0;display:grid;place-items:center;line-height:1;transform:rotate(var(--r)) scaleX(var(--f));filter:brightness(var(--lt,1));transition:filter 1.5s}
+.rm-b img{width:100%;height:100%;object-fit:contain;display:block;-webkit-user-drag:none}
+.rm-it.pop .rm-b{animation:drpop .5s var(--press)}
+.rm-it.wig .rm-b{animation:rmwig .7s ease-in-out 2}
+@keyframes rmwig{25%{transform:rotate(calc(var(--r) - 8deg)) scaleX(var(--f))}75%{transform:rotate(calc(var(--r) + 8deg)) scaleX(var(--f))}}
+.rm-gl{position:absolute;left:-60%;right:-60%;top:-70%;bottom:-20%;border-radius:50%;background:radial-gradient(closest-side,rgba(255,214,130,var(--ga,.45)),transparent);opacity:0;transition:opacity .6s;pointer-events:none}
+.rm-it.on .rm-gl{opacity:1}
+.rm-dr{position:absolute;left:50%;top:0;font-size:12px;animation:drsp .8s ease-in forwards;--dx:0px}
+#edCap{position:absolute;inset:0;z-index:5;touch-action:none}
+#edTop{position:absolute;left:50%;top:calc(var(--sat,0px) + 62px);translate:-50% 0;z-index:30;display:flex;gap:6px;padding:6px;border-radius:22px}
+#edBar{position:absolute;left:10px;right:10px;bottom:calc(env(safe-area-inset-bottom,0px) + 10px);z-index:30;border-radius:24px;padding:6px;display:flex;flex-direction:column;gap:4px}
+#edHint{position:absolute;left:50%;translate:-50% 0;top:calc(var(--sat,0px) + 118px);z-index:29;font-size:12px;padding:5px 12px;border-radius:14px;color:var(--ink-2);pointer-events:none;white-space:nowrap}
+.edr{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}.edr::-webkit-scrollbar{display:none}
+.eb{flex:none;min-width:44px;height:40px;padding:0 11px;border-radius:15px;background:var(--surface-2);color:var(--ink);font-size:13px;font-weight:700;display:grid;place-items:center;box-shadow:inset 0 0 0 1px var(--line);transition:transform .2s var(--press)}
+.eb:active{transform:scale(.92)}.eb.on{background:var(--accent);color:var(--on-accent)}.eb.pri{background:var(--accent);color:var(--on-accent)}.eb[disabled]{opacity:.35}
+body.oc-edit #nav{translate:0 140%;opacity:0;pointer-events:none}
+body.oc-edit #qbag,body.oc-edit .hud-qa,body.oc-edit .hud-quest{opacity:0!important;pointer-events:none!important}
+#nav{transition:translate .35s var(--ease),opacity .3s}
+.dr-row{display:flex;align-items:center;gap:8px;padding:8px 4px;border-bottom:1px solid var(--line)}
+.dr-row .it{width:42px;height:42px;display:grid;place-items:center;font-size:26px;flex:none;border-radius:14px;background:var(--surface-2)}
+.dr-row .it img{width:100%;height:100%;object-fit:contain}
+.dr-row b{flex:1;font-size:14px;color:var(--ink);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dr-ch{display:flex;gap:4px;flex-wrap:wrap;margin:2px 0 6px}
+.dr-ch .chip{height:30px;padding:0 10px;font-size:12px}

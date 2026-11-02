@@ -1,0 +1,95 @@
+/* ---------- 島嶼地面、沙灘、海 ---------- */
+#homeStage{--isle-g1:color-mix(in oklab,#8FCB6C 58%,var(--hill-x,#cfe0b0));--isle-g2:color-mix(in oklab,#78C25C 64%,var(--floor-b,#a8c79a));
+ --isle-g3:color-mix(in oklab,#5FAE52 58%,var(--floor-b,#a8c79a));--isle-sand:color-mix(in oklab,#F4E2B4 70%,var(--floor-a,#cfe0b0));
+ --isle-sea1:color-mix(in oklab,#6FD0D6 64%,var(--sky-c,#cfe9f0));--isle-sea2:color-mix(in oklab,#2E9DB5 66%,var(--floor-b,#557));
+ --isle-tuft:color-mix(in oklab,#5DAA4B 68%,var(--floor-b,#556));--isle-tint:var(--floor-b,#9b9)}
+#homeStage .oc-cam-plane>.floor{background:linear-gradient(180deg,var(--isle-sea1) 55%,var(--isle-sea2))!important;border-radius:0!important}
+#homeStage .oc-cam-plane>.floor>svg{display:none!important}
+#homeStage .oc-cam-plane>.floor::after{background:linear-gradient(180deg,var(--isle-sea2),color-mix(in oklab,var(--isle-sea2) 80%,#123))!important;top:99.5%!important}
+#sceneBackplate>.screen-sky{background:linear-gradient(180deg,var(--sky-a),var(--sky-b) 48%,var(--sky-c) 64%,var(--isle-sea1,#7cc) 82%,var(--isle-sea2,#39a))!important}
+#homeStage .rug{display:none}
+.isle-ground{position:absolute;inset:0;pointer-events:none}
+.isle-ground>svg.land{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.isle-ground .foam{stroke-dasharray:10 16;animation:isleFoam 7s linear infinite}
+.isle-ground .foam2{stroke-dasharray:4 22;animation:isleFoam 11s linear infinite reverse}
+@keyframes isleFoam{to{stroke-dashoffset:-260}}
+.isle-d{position:absolute;translate:-50% -100%;pointer-events:none}
+.isle-d svg{display:block;width:100%;height:100%;overflow:visible}
+.isle-tuft{width:15px;height:12px;transform-origin:50% 100%}
+.isle-tuft.sway{animation:isleSway var(--sd,4s) ease-in-out infinite;animation-delay:var(--dl,0s)}
+@keyframes isleSway{0%,100%{rotate:-4deg}50%{rotate:5deg}}
+.isle-fl{width:13px;height:13px}
+.isle-stone{translate:-50% -50%;width:26px;height:11px;border-radius:50%;background:radial-gradient(ellipse at 40% 35%,color-mix(in oklab,#F0E6CF 70%,var(--isle-tint)),color-mix(in oklab,#C9B894 70%,var(--isle-tint)));box-shadow:0 2px 0 color-mix(in oklab,#9E8C6B 60%,var(--isle-tint))}
+.isle-lily{translate:-50% -50%;width:24px;height:14px}
+.isle-dock{width:98px;height:132px;translate:-50% 0}
+.isle-glint{position:absolute;width:12px;height:3px;border-radius:3px;background:rgba(255,255,255,.75);translate:-50% -50%;opacity:0;animation:isleGlint var(--gd,3.6s) ease-in-out infinite;animation-delay:var(--dl,0s)}
+@keyframes isleGlint{0%,100%{opacity:0;scale:.4 1}45%{opacity:.85;scale:1 1}}
+.isle-lglow{opacity:0;transition:opacity 2s}
+#homeStage[data-phase=night] .isle-lglow{opacity:1}
+#homeStage[data-phase=dusk] .isle-lglow{opacity:.7}
+.isle-cshade{position:absolute;left:0;right:0;top:0;height:76%;overflow:hidden;pointer-events:none;opacity:0;transition:opacity 4s}
+#homeStage[data-phase=day][data-wx=sunny] .isle-cshade,#homeStage[data-phase=day][data-wx=cloudy] .isle-cshade{opacity:1}
+.isle-cshade i{position:absolute;top:var(--t);left:-30%;width:var(--w);height:var(--h);border-radius:50%;background:radial-gradient(closest-side,rgba(40,70,40,.13),transparent);animation:isleCloudShade var(--dur) linear infinite;animation-delay:var(--dl)}
+@keyframes isleCloudShade{to{transform:translateX(560%)}}
+/* 空中層：蝴蝶、點擊回饋 */
+.isle-air{position:absolute;inset:0;z-index:6;pointer-events:none;overflow:visible}
+.isle-bfly{position:absolute;left:0;top:0;width:18px;height:16px;transition:transform 4.2s cubic-bezier(.45,0,.55,1),opacity 1.5s;opacity:0}
+#homeStage[data-phase=day]:not([data-wx=rain]):not([data-wx=storm]):not([data-wx=snow]) .isle-bfly,#homeStage[data-phase=dawn]:not([data-wx=rain]):not([data-wx=storm]) .isle-bfly{opacity:1}
+.isle-bfly i{position:absolute;inset:0;animation:isleBob 1.6s ease-in-out infinite}
+.isle-bfly svg{width:100%;height:100%;overflow:visible}
+.isle-bfly .wl{transform-origin:9px 8px;animation:isleFlap .22s ease-in-out infinite alternate}
+.isle-bfly .wr{transform-origin:9px 8px;animation:isleFlap .22s ease-in-out infinite alternate-reverse}
+@keyframes isleFlap{from{scale:1 1}to{scale:.25 1}}
+@keyframes isleBob{50%{translate:0 -6px}}
+.isle-ring{position:absolute;width:44px;height:16px;translate:-50% -50%;border-radius:50%;border:2.5px solid rgba(255,255,255,.95);box-shadow:0 0 0 2px rgba(255,214,90,.55);pointer-events:none}
+.isle-pin{position:absolute;width:12px;height:12px;translate:-50% -50%;border-radius:2px 10px 2px 10px;background:var(--sun);box-shadow:0 2px 0 var(--sun-deep);pointer-events:none}
+.isle-ripple{position:absolute;width:30px;height:11px;translate:-50% -50%;border-radius:50%;border:2px solid rgba(255,255,255,.9);pointer-events:none}
+.isle-fish{position:absolute;width:26px;height:22px;translate:-50% -50%;pointer-events:none}
+.isle-leaf{position:absolute;width:11px;height:8px;border-radius:0 80% 0 80%;background:var(--c,#8BC34A);pointer-events:none}
+.isle-coin{position:absolute;width:24px;height:24px;translate:-50% -50%;pointer-events:none;filter:drop-shadow(0 2px 0 rgba(140,95,20,.35))}
+.isle-plus{position:absolute;translate:-50% -50%;font:900 14px var(--font);color:#B8860B;text-shadow:0 2px 0 #fff,0 -1px 0 #fff,1px 0 0 #fff,-1px 0 0 #fff;white-space:nowrap;pointer-events:none}
+.scene-tree{cursor:pointer}
+/* ---------- 光影層：只用一般透明度，不用混合模式（省電、不閃） ---------- */
+#isleLight{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+#isleLight>i{position:absolute;inset:0;opacity:0;transition:opacity 4s ease}
+#isleLight .vig{opacity:1;background:radial-gradient(ellipse 92% 80% at 50% 46%,transparent 58%,rgba(74,48,24,.20))}
+#isleLight .warm{background:linear-gradient(180deg,rgba(255,196,120,0) 25%,rgba(255,170,95,.16))}
+#isleLight[data-phase=dawn] .warm,#isleLight[data-phase=dusk] .warm{opacity:1}
+#isleLight[data-phase=day] .warm{opacity:.35}
+#isleLight .rays{inset:-20% -30% 20% -30%;background:repeating-conic-gradient(from 165deg at var(--rx,18%) -8%,rgba(255,246,214,0) 0deg 5deg,rgba(255,246,214,.17) 6deg 8deg,rgba(255,246,214,0) 9deg 15deg);-webkit-mask:linear-gradient(180deg,#000,transparent 62%);mask:linear-gradient(180deg,#000,transparent 62%);animation:isleRays 16s ease-in-out infinite alternate}
+#isleLight[data-phase=day][data-wx=sunny] .rays{opacity:.38}
+#isleLight[data-phase=dawn]:not([data-wx=rain]):not([data-wx=storm]) .rays{opacity:1;--rx:12%}
+#isleLight[data-phase=dusk]:not([data-wx=rain]):not([data-wx=storm]) .rays{opacity:.8;--rx:86%}
+@keyframes isleRays{to{transform:rotate(2.5deg) translateX(2%)}}
+#isleLight .night{background:radial-gradient(ellipse 90% 70% at 50% 35%,rgba(24,30,82,.08),rgba(16,20,60,.30))}
+#isleLight[data-phase=night] .night{opacity:1}
+#isleLight .wet{background:linear-gradient(180deg,rgba(60,80,110,.16),rgba(40,60,90,.10))}
+#isleLight[data-wx=rain] .wet,#isleLight[data-wx=storm] .wet{opacity:1}
+body.oc-edit #isleLight .vig{opacity:.4}
+html[data-motion=reduce] #isleLight .rays,html[data-motion=reduce] .isle-tuft.sway,html[data-motion=reduce] .isle-ground .foam,html[data-motion=reduce] .isle-ground .foam2,html[data-motion=reduce] .isle-glint,html[data-motion=reduce] .isle-cshade i{animation:none!important}
+
+/* ---------- 遠景再上色：更飽和的森林、空氣遠近感保留 ---------- */
+#homeStage .cozy-landscape path[fill="var(--hill-x)"]{fill:color-mix(in oklab,#8FCB6C 58%,var(--hill-x))}
+#homeStage .cozy-landscape path[fill="var(--hill-y)"]{fill:color-mix(in oklab,#A9D58A 48%,var(--hill-y))}
+#homeStage .cozy-landscape path[fill="var(--mtn)"]{fill:color-mix(in oklab,#9EC3D6 40%,var(--mtn))}
+#homeStage .cozy-landscape path[fill="var(--tree-a)"]{fill:color-mix(in oklab,#7FC26A 58%,var(--tree-a))}
+#homeStage .cozy-landscape path[fill="var(--tree-b)"]{fill:color-mix(in oklab,#4E9E5C 58%,var(--tree-b))}
+#homeStage .cozy-landscape path[fill="var(--bush)"]{fill:color-mix(in oklab,#69B467 58%,var(--bush))}
+#homeStage .cozy-landscape path[fill="var(--roof-a)"]{fill:color-mix(in oklab,#58B79A 55%,var(--roof-a))}
+#homeStage .cozy-landscape path[fill="var(--roof-b)"]{fill:color-mix(in oklab,#3A8F7A 55%,var(--roof-b))}
+#homeStage .cozy-landscape path[fill="var(--wood)"]{fill:color-mix(in oklab,#B98157 55%,var(--wood))}
+#homeStage{--leaf-a:#8CCB7A;--leaf-b:#5FA66E;--leaf-c:#B5DA8C;--pot:#E3A07A;--pot-rim:#F4BE8E}
+/* 內建幾何角色（不含使用者匯入圖片）稍微提高飽和，更有「玩偶」質感 */
+#homeStage .actor .adj>svg.oc-svg{filter:saturate(1.16) contrast(1.03)}
+
+/* 舊的整片色罩會讓畫面發白，改由 #isleLight 分層打光 */
+#sceneAtmosphere>.shade,#sceneAtmosphere>.glow{display:none!important}
+#homeStage[data-phase=dusk]{--isle-g1:color-mix(in oklab,#8FCB6C 58%,var(--hill-x));--isle-g2:color-mix(in oklab,#8DAF58 58%,var(--floor-b));--isle-g3:color-mix(in oklab,#6E9A4C 55%,var(--floor-b));--isle-sea1:color-mix(in oklab,#7FC2C8 50%,var(--sky-c));--isle-sea2:color-mix(in oklab,#3D7FA3 60%,var(--floor-b))}
+#homeStage[data-phase=night]{--isle-g1:color-mix(in oklab,#3F6B5C 50%,var(--hill-x));--isle-g2:color-mix(in oklab,#3D6A57 66%,var(--floor-b));--isle-g3:color-mix(in oklab,#2F5A4C 66%,var(--floor-b));--isle-sand:color-mix(in oklab,#9C9A8C 60%,var(--floor-a));--isle-sea1:color-mix(in oklab,#2D5F7A 70%,var(--sky-c));--isle-sea2:color-mix(in oklab,#1C3D5C 72%,var(--floor-b));--isle-tuft:#335C4A;--isle-tint:#2E3C5C}
+#homeStage[data-phase=dawn]{--isle-sea1:color-mix(in oklab,#9AD1D6 55%,var(--sky-c))}
+#homeStage[data-phase=night] .cozy-landscape path[fill="var(--hill-x)"],#homeStage[data-phase=night] .cozy-landscape path[fill="var(--hill-y)"]{fill:color-mix(in oklab,#3F6B5C 50%,var(--hill-x))}
+#homeStage[data-phase=night] .cozy-landscape path[fill="var(--tree-a)"],#homeStage[data-phase=night] .cozy-landscape path[fill="var(--bush)"]{fill:color-mix(in oklab,#3E6E57 55%,var(--tree-a))}
+#homeStage[data-phase=night] .cozy-landscape path[fill="var(--tree-b)"]{fill:color-mix(in oklab,#2D5545 55%,var(--tree-b))}
+#isleLight .night{background:radial-gradient(ellipse 90% 70% at 50% 40%,rgba(18,24,70,.10),rgba(12,16,52,.34))!important}
+#p-home.idle .hud-top,#p-home.idle .hud-rail,#p-home.idle .hud-qa,#p-home.idle .hud-quest,#app.hud-idle .nav[data-pg="0"],#p-home.idle #isleClock{opacity:.9!important}
+#p-home.idle .qbag:not(.open){opacity:.8!important}
