@@ -126,6 +126,11 @@ function wire(){
     const row=el(`<button class="row btn-row" id="dkSetRow"><span class="r-ic">${ic('layers')}</span><div class="r-t"><b>桌面夥伴（Android 懸浮桌寵）</b><small></small></div><span class="chev">${ic('right')}</span></button>`);
     row.onclick=()=>openManager();if(legacy)legacy.replaceWith(row);refreshUI()}catch(e){console.warn(e)}};
   Settings.make();
+  // Explore page "裝置功能": the desktop pet row is real now → open the manager, honest tags for the rest.
+  const ex=document.getElementById('exNative');
+  if(ex){const r0=ex.querySelector('[data-i="0"]');if(r0){const tg=r0.querySelector('.tag');if(tg){tg.textContent=API.available()?'可使用':'Android 版';tg.classList.toggle('soon',!API.available())}}
+    ex.querySelectorAll('[data-i]:not([data-i="0"]) .tag').forEach(t=>{t.textContent='規劃中'});
+    ex.addEventListener('click',e=>{const b=e.target.closest('[data-i="0"]');if(!b)return;e.stopImmediatePropagation();buzz(8);openManager()},true)}
   refreshUI();
   // Keep the desktop snapshot fresh: character edits, theme, and needs drift.
   const p=Chars.patch.bind(Chars);Chars.patch=function(ch,o){const r=p(ch,o);if(API.isPet(ch.id))schedule(1500);return r};
