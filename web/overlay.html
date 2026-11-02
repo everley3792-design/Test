@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-Hant" data-theme="light" data-motion="full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>OC Shimeji Pet</title>
+<!-- Android desktop pet renderer: one transparent WebView per floating pet.
+     Reuses the game's own stylesheets so the character art, blink, tail, ears,
+     breathing and walk cycles look exactly like on the island. -->
+<link rel="stylesheet" href="css/legacy/01-block.css">
+<link rel="stylesheet" href="css/legacy/02-ocs-24d-css.css">
+<link rel="stylesheet" href="css/legacy/03-ocs-24d-css2.css">
+<link rel="stylesheet" href="css/legacy/04-ocs-24e-css.css">
+<link rel="stylesheet" href="css/legacy/05-atelier-polish.css">
+<link rel="stylesheet" href="css/legacy/06-softcat-ref-match.css">
+<link rel="stylesheet" href="css/legacy/07-softcat-face-options.css">
+<link rel="stylesheet" href="css/legacy/08-ocs-24j-motion-accessories.css">
+<link rel="stylesheet" href="css/legacy/09-ocs-25e-flicker-stability.css">
+<link rel="stylesheet" href="css/legacy/12-block.css">
+<link rel="stylesheet" href="css/legacy/14-block.css">
+<link rel="stylesheet" href="css/legacy/16-block.css">
+<link rel="stylesheet" href="css/legacy/17-block.css">
+<link rel="stylesheet" href="css/legacy/19-block.css">
+<link rel="stylesheet" href="css/legacy/20-oc-visual-2-4fa.css">
+<link rel="stylesheet" href="css/legacy/27-block.css">
+<link rel="stylesheet" href="css/legacy/29-block.css">
+<link rel="stylesheet" href="css/legacy/33-ocs-cozy-motion.css">
+<link rel="stylesheet" href="css/legacy/34-ocs-community-style.css">
+<link rel="stylesheet" href="css/legacy/36-stable-dialog-foundation.css">
+<link rel="stylesheet" href="css/legacy/38-ocs-25d-quality-pass.css">
+<link rel="stylesheet" href="css/legacy/40-ocs-25f-polish.css">
+<link rel="stylesheet" href="css/legacy/42-ocs-25g-refinement.css">
+<link rel="stylesheet" href="css/legacy/44-ocs-25g-bag-layer.css">
+<link rel="stylesheet" href="css/legacy/45-ocs-25h-usability.css">
+<link rel="stylesheet" href="css/legacy/47-ocs-25i-comfort.css">
+<link rel="stylesheet" href="css/legacy/49-isle-26-tokens.css">
+<link rel="stylesheet" href="css/legacy/50-isle-26-ui.css">
+<link rel="stylesheet" href="css/legacy/51-isle-26-world.css">
+<link rel="stylesheet" href="css/legacy/53-isle-27-world.css">
+<link rel="stylesheet" href="css/legacy/54-isle-27-motion.css">
+<link rel="stylesheet" href="css/legacy/56-isle-271-talk.css">
+<link rel="stylesheet" href="css/legacy/58-isle-28-shop.css">
+<link rel="stylesheet" href="css/legacy/60-isle-29-life.css">
+<link rel="stylesheet" href="css/legacy/62-isle-30-goals.css">
+<link rel="stylesheet" href="css/legacy/64-isle-31-ia.css">
+<link rel="stylesheet" href="css/legacy/66-isle-32.css">
+<link rel="stylesheet" href="css/modules/overlay.css">
+</head>
+<body class="pet-body">
+<div class="stage pet-stage" id="petStage" data-phase="day">
+  <div class="actor" data-state="idle" id="actor"><div class="a-flip"><div class="a-tilt"><div class="a-pose"><div class="a-squash"><div class="art"><div class="adj" id="adj"></div></div></div></div></div></div><div class="zzz"><b>z</b><b>z</b><b>Z</b></div></div>
+  <div class="pet-fx" id="fx"></div>
+</div>
+<script src="js/modules/overlay-pet.js"></script>
+</body>
+</html>
