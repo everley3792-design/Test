@@ -7,6 +7,8 @@
 <meta name="color-scheme" content="light dark">
 <title>OC Shimeji｜我的夥伴小世界</title>
 <script>
+/* 3.3: remember whether this is a brand-new player before anything writes a save */
+try{window.OCS_FIRST_RUN=!localStorage.getItem('ocs.v1')&&!localStorage.getItem('ocs.eco.v1')}catch(e){window.OCS_FIRST_RUN=false}
 /* 提早套用主題與動態偏好，避免啟動閃爍 */
 (function(){try{var s=JSON.parse(localStorage.getItem('ocs.v1')||'{}');var t=s.theme||'system';
 var d=t==='dark'||(t==='system'&&matchMedia('(prefers-color-scheme: dark)').matches);
@@ -219,5 +221,7 @@ document.querySelector('meta[name=theme-color]').content=d?'#202C38':'#F4F2EC'}c
 <link rel="stylesheet" href="css/modules/perf.css">
 <script src="js/modules/perf.js"></script>
 <script src="js/modules/native-bridge.js"></script>
+<link rel="stylesheet" href="css/modules/onboarding.css">
+<script src="js/modules/onboarding.js"></script>
 </body>
 </html>

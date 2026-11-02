@@ -42,3 +42,36 @@ module.exports.perf=async t=>{const p=t.page;await p.goto(t.url);await p.waitFor
   await p.evaluate(()=>{OCSPerf.setCustom('fps',45);Cfg.flush()});const saved=await p.evaluate(()=>JSON.parse(localStorage.getItem('ocs.v1')).perf);t.assert(saved.mode==='custom'&&saved.custom.fps===45,'custom saved');
   await p.reload();await p.waitForTimeout(2500);t.assert(await p.evaluate(()=>OCSPerf.state().mode==='custom'&&OCSPerf.cap===45),'restored after reload');
   await p.evaluate(()=>{Settings.open()});await p.waitForTimeout(600);await p.evaluate(()=>document.getElementById('perfSec').scrollIntoView());await p.waitForTimeout(300);await t.shot('settings')};
+module.exports.firstrun=async t=>{const p=t.page;await p.goto(t.url);await p.waitForTimeout(2500);
+  t.assert(await p.$('#obRoot .obs-wel'),'welcome screen on first run');await t.shot('1-welcome');
+  await p.click('#obRoot [data-k=start]');await p.waitForTimeout(6500);await t.shot('2-cinematic');
+  await p.click('#obRoot [data-k=pause]');await p.waitForTimeout(1200);const t1=await p.evaluate(()=>document.querySelector('.ob-cam').getAnimations()[0].currentTime);
+  await p.waitForTimeout(800);const t2=await p.evaluate(()=>document.querySelector('.ob-cam').getAnimations()[0].currentTime);t.assert(t1===t2,'pause freezes cinematic');
+  await p.click('#obRoot [data-k=pause]');await p.waitForTimeout(500);await p.click('#obRoot [data-k=skip]');await p.waitForTimeout(900);
+  t.assert(await p.$('#obRoot .ob-modes'),'mode chooser');await t.shot('3-mode');
+  await p.click('#obRoot [data-k=both]');await p.waitForTimeout(900);await t.shot('4-create-look');
+  await p.click('#obRoot [data-k=cat][data-v=ears]');await p.click('#obRoot [data-k=opt] >> nth=2');await p.click('#obRoot [data-k=dice]');await p.waitForTimeout(400);
+  await p.click('#obRoot [data-k=next]');await p.waitForTimeout(500);await p.fill('#obName','測試貓');await p.click('#obRoot [data-k=next]');await p.waitForTimeout(500);
+  await p.click('#obRoot [data-k=tr] >> nth=5');await p.click('#obRoot [data-k=tr] >> nth=2');await p.waitForTimeout(400);await t.shot('5-create-pers');
+  await p.click('#obRoot [data-k=next]');await p.waitForTimeout(400);await p.fill('#obRoot [data-s=catch]','喵嗚～');await p.click('#obRoot [data-k=next]');await p.waitForTimeout(500);await t.shot('6-create-done');
+  await p.click('#obRoot [data-k=next]');await p.waitForTimeout(1500);t.assert(await p.$('#obRoot .ob-demos'),'neighbour picker');
+  await p.click('#obRoot [data-k=t] >> nth=1');await p.waitForTimeout(300);await t.shot('7-demos');await p.click('#obRoot [data-k=go]');
+  await p.waitForTimeout(2600);await t.shot('8-arrival');
+  const roster=await p.evaluate(()=>({sel:Cfg.v.community.selected,active:Cfg.v.active,name:Chars.active().name,catch:Chars.active().data.speech.catch}));
+  t.log('roster '+JSON.stringify(roster));t.assert(roster.name==='測試貓'&&roster.sel.length===2,'created OC + 1 demo on island');t.assert(roster.catch==='喵嗚～','speech saved');
+  for(let i=0;i<4;i++){await p.mouse.click(195,600);await p.waitForTimeout(700)}
+  await p.waitForSelector('.ob-tut',{timeout:15000});await p.waitForTimeout(800);await t.shot('9-tutorial-1');
+  await p.click('.ob-tut [data-k=next]');await p.waitForTimeout(900);await t.shot('9-tutorial-pet');
+  const box=await p.evaluate(()=>{const r=Home.stage.actor.getBoundingClientRect();return{x:r.left+r.width/2,y:r.top+r.height*.45}});await p.mouse.click(box.x,box.y);await p.waitForTimeout(1600);
+  const step=await p.evaluate(()=>document.querySelector('.ob-tip small').textContent);t.log('after petting: step '+step);
+  for(let i=0;i<14;i++){const b=await p.$('.ob-tut [data-k=next]:not([hidden])');if(!b){await p.waitForTimeout(800);const c=await p.$('.ob-tut [data-k=next]');if(!c)break;await c.evaluate(e=>e.hidden=false);continue}if(i===4)await t.shot('9-tutorial-mid');await b.click();await p.waitForTimeout(650)}
+  await p.waitForTimeout(800);const ob=await p.evaluate(()=>{Cfg.flush();return Cfg.v.ob});t.assert(ob.done,'onboarding done');await t.shot('10-free');
+  await p.reload();await p.waitForTimeout(3500);t.assert(!(await p.$('#obRoot')),'no onboarding after reload');
+  t.assert(await p.evaluate(()=>Chars.active().name==='測試貓'),'created OC persisted');};
+module.exports.legacy=async t=>{const p=t.page;
+  await p.addInitScript(()=>{if(!localStorage.getItem('ocs.v1'))localStorage.setItem('ocs.v1',JSON.stringify({theme:'light',active:'yuzu',dataVer:2,overrides:{}}))});
+  await p.goto(t.url);await p.waitForTimeout(3500);t.assert(!(await p.$('#obRoot')),'old save: no forced onboarding');
+  const ob=await p.evaluate(()=>Cfg.v.ob);t.assert(ob&&ob.done&&ob.legacy,'old save marked onboarded');t.assert(await p.evaluate(()=>Cfg.v.active==='yuzu'),'old active character kept');
+  await p.evaluate(()=>Settings.open());await p.waitForTimeout(500);t.assert(await p.$('#obSec'),'replay rows in settings');
+  await p.evaluate(()=>{Settings.close();OCSOnboarding.replayOpening()});await p.waitForTimeout(700);await p.click('#obRoot [data-k=start]');await p.waitForTimeout(1500);await p.click('#obRoot [data-k=skip]');await p.waitForTimeout(900);
+  t.assert(!(await p.$('#obRoot')),'replay returns to game');t.assert(await p.evaluate(()=>Cfg.v.active==='yuzu'),'replay does not change roster')};
