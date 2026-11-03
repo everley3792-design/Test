@@ -142,8 +142,12 @@ function openPair(a,b){const LL=L(),lab=LL.relLabel(a.id,b.id),bad=/絕交|彆�
     if(k==='chat'||k==='hug'){LL.command(a.id,{type:'visit',who:b.id})}else if(k==='play'){LL.command(a.id,{type:'visit',who:b.id});setTimeout(()=>LL.socialEncounter(a,b,true),2500)}else if(k==='mediate'){LL.command(a.id,{type:'visit',who:b.id});setTimeout(()=>LL.apologize(a,b,true),2200)}else if(k==='quarrel')LL.quarrel(a,b)})}
 
 /* ---------- bag: feed / gift / play (uses the legacy item logic for reactions & taste memory) ---------- */
-function fakeStage(a){const st=new Proxy({},{get:(t,k)=>k in t?t[k]:k==='actor'?document.createElement('div'):typeof k==='string'&&/^[a-z]/.test(k)?()=>{}:undefined,set:(t,k,v)=>{t[k]=v;return true}});
-  st.ch=a.ch;st.state='idle';st.sleeping=()=>false;st.say=(t)=>L().say(a,t,2.8);st.root=document.createElement('div');st.W=E.W;st.H=E.H;return st}
+let fsRoot=null;
+function fakeStage(a){if(!fsRoot){fsRoot=document.createElement('div');fsRoot.id='isleFakeStage';fsRoot.setAttribute('aria-hidden','true');fsRoot.style.cssText='position:fixed;left:-9999px;top:0;width:200px;height:200px;overflow:hidden;visibility:hidden;pointer-events:none';document.body.append(fsRoot)}
+  const div=()=>{const d=document.createElement('div');fsRoot.append(d);return d};
+  const base={ch:a.ch,state:'idle',sleeping:()=>false,say:t=>L().say(a,t,2.8),root:fsRoot,actor:div(),tiltEl:div(),poseEl:div(),sqEl:div(),flip:div(),art:div(),adj:div(),shadow:div(),fx:div(),bubble:div(),
+    x:60,size:100,feetY:180,h:0,hitTop:90,W:E.W,H:E.H,cool:{},hist:[],spots:{},dir:1,setState(st){this.state=st},interrupt(){},squash(){},hearts(){L().emote(a,'heart')}};
+  return new Proxy(base,{get:(t,k)=>k in t?t[k]:typeof k==='string'&&/^[a-z]/.test(k)?()=>{}:undefined,set:(t,k,v)=>{t[k]=v;return true}})}
 function openBag(id,filter){const a=L()?.agent(id)||L()?.agent(Cfg.v.active);const tabs=[['food','食物',['food']],['drink','飲料',['drink']],['gift','禮物・玩具',['gift','toy']],['all','全部',null]];let tab=filter==='gift'?'gift':filter==='food'?'food':'all';
   const s=openSheet(`<div data-emoji-keep class="sh-body ib"><div class="sh-title">背包${a?`<small>給 ${esc(first(a.ch.name))}</small>`:''}</div><div class="ib-tabs">${tabs.map(t=>`<button data-t="${t[0]}">${t[1]}</button>`).join('')}</div><div class="ib-grid"></div><div class="ib-foot"><button class="btn sm" data-shop>${ic('store')}去商店買</button></div></div>`);
   const grid=s.el.querySelector('.ib-grid');
@@ -153,10 +157,13 @@ function openBag(id,filter){const a=L()?.agent(id)||L()?.agent(Cfg.v.active);con
   s.el.addEventListener('click',e=>{const t=e.target.closest('[data-t]');if(t){tab=t.dataset.t;draw();return}if(e.target.closest('[data-shop]')){s.close();openShop();return}
     const b=e.target.closest('.ib-it');if(!b||!a)return;const it=Items.get(b.dataset.id);if(!it)return;buzz(10);s.close();useItem(a,it)});draw()}
 function itemArt(i){try{if(window.MiniArt?.url){const u=MiniArt.url(i);if(u)return `<img src="${u}" alt="">`}}catch(_){}try{if(i.img)return `<img src="${i.img}" alt="">`}catch(_){}return `<span class="ib-em">${i.em||{food:'🍙',drink:'🥤',toy:'🧸',gift:'🎁'}[i.cat]||'📦'}</span>`}
-function useItem(a,it){if(a.inside&&E.viewMode!=='room')L().exitHouse(a);let ok=false;try{ok=Items.use(it.id,fakeStage(a))!==false}catch(e){console.warn(e);ok=false}
-  if(!ok){if(it.qty>0){Items.qty(it.id,-1);ok=true;try{document.dispatchEvent(new CustomEvent('oc:fed',{detail:{charId:a.id,itemId:it.id}}))}catch(_){}}}
-  if(!ok)return;if(it.cat==='food'||it.cat==='drink')L().feed(a.id,it);else{a.cat.play('happy');a.cat.expr({eyes:'happy',blush:1},3);L().emote(a,'heart');try{IsleLife.memo({id:a.id},`收到禮物「${it.name}」`,{place:'小島'})}catch(_){}try{Econ.on('gift')}catch(_){}}
-  refresh()}
+function useItem(a,it){if(a.inside&&E.viewMode!=='room')L().exitHouse(a);const q0=it.qty,food=it.cat==='food'||it.cat==='drink';let r=false;
+  a.task={type:'do',anim:'look',dur:3,t0:E.clock};a.cat.play('look');
+  try{r=Items.use(it.id,fakeStage(a))}catch(e){console.warn(e);r=false}
+  if(r===false){if(!food&&it.qty===q0&&q0>0){Items.qty(it.id,-1);r=true}else return}
+  if(!food){a.cat.play('happy');a.cat.expr({eyes:'happy',blush:1},3);L().emote(a,'heart');try{IsleLife.memo({id:a.id},`收到禮物「${it.name}」`,{place:'小島'})}catch(_){}try{Econ.on('gift')}catch(_){}refresh();return}
+  // the taste system decides after a short "sniff": eaten → happy eating, refused → polite refusal
+  setTimeout(()=>{if(it.qty<q0||!it.consume){L().feed(a.id,it);a.cat.expr({eyes:'happy',blush:1},3)}else{a.cat.play('sad');a.cat.expr({eyes:'sad',mouth:'frown'},2.5);L().emote(a,'sweat')}refresh()},2600)}
 function openShop(){try{if(window.OCSShop?.open)return OCSShop.open();}catch(_){}try{Shop.open()}catch(_){toast('商店整理中','info')}}
 
 /* ---------- who (residents, quick status, switch control) ---------- */

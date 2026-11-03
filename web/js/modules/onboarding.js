@@ -61,7 +61,20 @@ function islandSVG(k){return `<svg class="ob-isle ob-isle-${k}" viewBox="0 0 400
    <g class="ob-smoke"><circle cx="226" cy="114" r="4" fill="#fff" opacity=".7"/><circle cx="231" cy="104" r="5" fill="#fff" opacity=".5"/><circle cx="238" cy="92" r="6" fill="#fff" opacity=".3"/></g>
    <g fill="#F6B8C8"><circle cx="150" cy="182" r="2.6"/><circle cx="158" cy="186" r="2.2"/><circle cx="252" cy="182" r="2.4"/></g><g fill="#FFE08A"><circle cx="140" cy="186" r="2.2"/><circle cx="262" cy="186" r="2.6"/></g></g>
  </svg>`}
-function cinematic(replay){ST().stage='opening';Cfg.save();
+function cinematic3d(replay){ST().stage='opening';Cfg.save();const E=Isle3D;root.classList.add('see');
+  const s=show(`<div class="ob-cine3d"><div class="ob-bars"><i></i><i></i></div><div class="ob-cap" aria-live="polite"></div>
+    <div class="ob-ctl"><button class="ob-ic" data-k="snd" aria-label="聲音">${Music.on?SV.son:SV.soff}</button><button class="ob-ic" data-k="pause" aria-label="暫停">${SV.pause}</button><button class="ob-skip" data-k="skip">跳過 ${SV.skip}</button></div></div>`,'obs-cine');
+  const K=[[0,{yaw:-2.6,pitch:1.25,dist:110,tx:0,tz:0}],[.28,{yaw:-1.4,pitch:1.0,dist:70,tx:0,tz:1}],[.55,{yaw:-.7,pitch:.78,dist:40,tx:2,tz:2.5}],[.8,{yaw:-.2,pitch:.7,dist:30,tx:-1,tz:0}],[1,{yaw:-.42,pitch:.74,dist:42,tx:-1.2,tz:.4}]];
+  const total=(reduce()?7:19)*1000;let t=0,paused=false,done=false;const saved=Object.assign({},E.rig.want);E.rig.follow=null;
+  const ease=x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2;
+  const cam=E.add({update(dt){if(paused||done)return;t+=dt*1000;const k=Math.min(1,t/total);let i=0;while(i<K.length-2&&k>K[i+1][0])i++;const[a,A]=K[i],[b,B]=K[i+1],f=ease((k-a)/(b-a));
+    for(const key in A)E.rig.want[key]=A[key]+(B[key]-A[key])*f;if(k>=1)end();return true}});
+  Object.assign(E.rig,K[0][1]);Object.assign(E.rig.want,K[0][1]);E.kick();
+  const A=[],cap=s.querySelector('.ob-cap');CAPS.forEach((tx,i)=>{const d=el(`<p>${esc(tx)}</p>`);cap.append(d);A.push(d.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'none',offset:.15},{opacity:1,offset:.82},{opacity:0,transform:'translateY(-6px)'}],{duration:total/5.2,delay:300+i*total/5,fill:'both',easing:'ease-in-out'}))});
+  function end(){if(done)return;done=true;E.updaters.delete(cam);A.forEach(a=>{try{a.cancel()}catch(_){}});root&&root.classList.remove('see');if(replay){Object.assign(E.rig.want,saved);Music.stop();unmount();return}chooseMode()}
+  on(s,{skip:end,pause:b=>{paused=!paused;A.forEach(a=>paused?a.pause():a.play());paused?Music.pause():Music.resume();b.innerHTML=paused?SV.play:SV.pause},
+    snd:b=>{Music.on=!Music.on;if(Music.on)Music.start();else Music.stop();b.innerHTML=Music.on?SV.son:SV.soff}})}
+function cinematic(replay){if(I3())return cinematic3d(replay);ST().stage='opening';Cfg.save();
   const demos=Chars.list.filter(c=>c.kind==='demo').slice(0,3);
   const s=show(`<div class="ob-cine"><div class="ob-sky"><i class="ob-sun"></i><i class="ob-cloud c1"></i><i class="ob-cloud c2"></i><i class="ob-cloud c3"></i><i class="ob-bird b1">⌒</i><i class="ob-bird b2">⌒</i></div>
     <div class="ob-cam">${islandSVG('cine')}<div class="ob-cats">${demos.map((c,i)=>`<div class="ob-cat k${i}">${actorHTML(c,'walk')}</div>`).join('')}</div></div>
@@ -104,9 +117,11 @@ function chooseMode(){ST().stage='mode';Cfg.save();backFn=null;
 /* ---------- 4. pick demo companions ---------- */
 function pickDemos(o){ST().stage='demos';Cfg.save();backFn=()=>chooseMode();const demos=Chars.list.filter(c=>c.kind==='demo');const sel=new Set(o.mode==='demo'?demos.map(c=>c.id):[]);
   const s=show(`<div class="ob-page"><div class="ob-head"><small>${o.created?esc(o.created.name)+' 的鄰居':'選擇夥伴'}</small><h2>${o.created?'要和哪些貓咪一起住？':'選擇要一起生活的夥伴'}</h2><p>${o.created?'可以都不選，讓小島只屬於你的 OC。':'至少選一位；沒選到的夥伴之後也能再邀請。'}</p></div>
-   <div class="ob-demos">${demos.map(c=>`<button class="ob-demo ${sel.has(c.id)?'on':''}" data-k="t" data-id="${c.id}">${actorHTML(c,'idle')}<b>${esc(c.name)}</b><small>${esc(c.sub)}</small><i class="ob-ck">✓</i></button>`).join('')}</div>
+   <div class="ob-strip" id="obStrip"></div>
+   <div class="ob-demos">${demos.map(c=>`<button class="ob-demo ${sel.has(c.id)?'on':''}" data-k="t" data-id="${c.id}"><span class="ob-dthumb">${thumbHTML(c)}</span><b>${esc(c.name)}</b><small>${esc(c.sub)}</small><i class="ob-ck">✓</i></button>`).join('')}</div>
    <div class="ob-acts">${btn('go','決定','primary')}${btn('back','返回','ghost')}</div></div>`,'obs-page');
-  on(s,{t:b=>{const id=b.dataset.id,a=b.querySelector('.actor');if(sel.has(id))sel.delete(id);else{sel.add(id);a.dataset.state='happy';setTimeout(()=>a.dataset.state='idle',900)}b.classList.toggle('on',sel.has(id))},
+  let pv=null;if(window.Isle3DPreview){pv=new Isle3DPreview(s.querySelector('#obStrip'),{dist:5.2,y:.8});if(pv.failed)pv=null;else{pv.setCats(demos,1.25);demos.forEach((c,i)=>{if(sel.has(c.id))pv.play(i,'happy',1400)})}}
+  on(s,{t:b=>{const id=b.dataset.id,i=demos.findIndex(c=>c.id===id);if(sel.has(id)){sel.delete(id);pv&&pv.play(i,'sad',1400)}else{sel.add(id);pv&&pv.play(i,'happy',1600)}b.classList.toggle('on',sel.has(id))},
     back:()=>chooseMode(),
     go:()=>{if(!sel.size&&!o.created){toast('至少選擇一位夥伴，或回上一步捏自己的 OC','info');return}apply({demos:[...sel],created:o.created||null})}})}
 
@@ -133,11 +148,14 @@ function creator(o){ST().stage='create';Cfg.save();backFn=()=>chooseMode();
      <div class="ob-test"><button data-k="pose" data-p="happy">開心</button><button data-k="pose" data-p="hop">跳跳</button><button data-k="pose" data-p="walk">走走</button><button data-k="pose" data-p="sleep">睡覺</button></div>
      <p class="ob-say" id="obSay"></p></div>
    <div class="ob-steps">${steps.map((t,i)=>`<i data-i="${i}">${t}</i>`).join('')}</div><div class="ob-cr-body" id="obBody"></div>
-   <div class="ob-acts row">${btn('prev','上一步','ghost')}${btn('next','下一步','primary')}</div></div>`,'obs-page cr');
+   <div class="ob-acts row">${btn('prev','上一步','ghost')}${btn('fin','直接完成','ghost')}${btn('next','下一步','primary')}</div></div>`,'obs-page cr');
   const prev=s.querySelector('#obPrev'),body=s.querySelector('#obBody'),say=s.querySelector('#obSay');
   const fake=()=>({id:'ob_preview',kind:'custom',name:st.name,look:st.look,data:Persona.norm({nick:st.nick,pronoun:st.pronoun,birthday:st.birthday,pers:{sl:st.sl,traits:st.traits},speech:st.speech})});
-  let poseT=0;const paint=()=>{prev.innerHTML=actorHTML({svg:ocSVG({look:st.look})},prev._st||'idle')};
-  const pose=p=>{prev._st=p==='hop'?'hop':p;paint();clearTimeout(poseT);if(p!=='sleep')poseT=setTimeout(()=>{prev._st='idle';paint()},p==='walk'?2600:1300)};
+  // live 3D preview (drag to rotate); falls back to the 2D art when WebGL is unavailable
+  let poseT=0,pv=null,pvSig='';const P3={hop:'happy',happy:'happy',walk:'walk',sleep:'sleep',idle:'idle'};
+  const paint=()=>{if(!pv&&window.Isle3DPreview){pv=new Isle3DPreview(prev,{dist:4.1,y:.9});if(pv.failed)pv=null;else prev.classList.add('is3d')}
+    if(pv){const sig=JSON.stringify(st.look);if(sig!==pvSig){pvSig=sig;pv.setCats([fake()])}pv.play(0,P3[prev._st||'idle']||'idle')}else prev.innerHTML=actorHTML({svg:ocSVG({look:st.look})},prev._st||'idle')};
+  const pose=p=>{prev._st=p;paint();clearTimeout(poseT);if(p!=='sleep')poseT=setTimeout(()=>{prev._st='idle';paint()},p==='walk'?2600:1400)};
   const talk=t=>{say.textContent=t;say.classList.remove('pop');void say.offsetWidth;say.classList.add('pop')};
   const swatches=['#F6E8E7','#F4E6D6','#E5DBC2','#F8E7D3','#E8B9BB','#C7B8DE','#BDC8E6','#BDCFB4','#D6D1CE','#9E9AA6','#7D6E66','#F2F0EA'];
   function stepLook(){let cur=st._cat||'body';
@@ -168,9 +186,10 @@ function creator(o){ST().stage='create';Cfg.save();backFn=()=>chooseMode();
     body.innerHTML=`<div class="ob-card"><h3>${esc(st.name)}</h3><p>${esc(personalityLine(st.sl,st.traits))}</p>${tr.length?`<div class="ob-tags">${tr.map(t=>`<span>${t.em} ${t.t}</span>`).join('')}</div>`:''}${st.speech.catch?`<p class="ob-q">口頭禪：「${esc(st.speech.catch)}」</p>`:''}<small>完成後可以在「角色 → 編輯」繼續細調、匯入自己的圖片或動畫素材。</small></div>`;body._h={};pose('happy');talk(greetingFor(f)[1])}
   const RUN=[stepLook,stepName,stepPers,stepSpeech,stepDone];
   const go=i=>{st.step=Math.max(0,Math.min(RUN.length-1,i));s.querySelectorAll('.ob-steps i').forEach((x,k)=>{x.classList.toggle('on',k===st.step);x.classList.toggle('done',k<st.step)});
-    s.querySelector('[data-k=prev]').textContent=st.step?'上一步':'返回';s.querySelector('[data-k=next]').textContent=st.step===RUN.length-1?'就決定是你了！':'下一步';body.classList.remove('in');void body.offsetWidth;body.classList.add('in');RUN[st.step]()};
+    s.querySelector('[data-k=prev]').textContent=st.step?'上一步':'返回';s.querySelector('[data-k=next]').textContent=st.step===RUN.length-1?'就決定是你了！':'下一步';s.querySelector('[data-k=fin]').hidden=st.step===RUN.length-1;body.classList.remove('in');void body.offsetWidth;body.classList.add('in');RUN[st.step]()};
   s.addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(!b)return;const k=b.dataset.k;buzz(6);
     if(k==='pose')return pose(b.dataset.p);if(k==='prev'){if(!st.step)return chooseMode();return go(st.step-1)}
+    if(k==='fin'){if(!st.name.trim())st.name='新夥伴';return go(RUN.length-1)}
     if(k==='next'){if(st.step===1&&!st.name.trim()){toast('幫夥伴取個名字吧','info');return}if(st.step<RUN.length-1)return go(st.step+1);return createAndContinue()}
     const h=body._h&&body._h[k];if(h)h(b)});
   async function createAndContinue(){const btnN=s.querySelector('[data-k=next]');btnN.disabled=true;
@@ -178,55 +197,82 @@ function creator(o){ST().stage='create';Cfg.save();backFn=()=>chooseMode();
       try{afterChange()}catch(_){}if(o.mode==='both')pickDemos({mode:'both',created:ch});else apply({demos:[],created:ch})}catch(e){console.error(e);btnN.disabled=false;toast('建立失敗，請再試一次','info')}}
   paint();go(st.step)}
 
-/* ---------- 6. apply roster, arrival cinematic ---------- */
+/* ---------- 6. apply roster → choose a house → place it → arrival ---------- */
+const I3=()=>window.Isle3D&&window.Isle3D.ready&&window.Isle3DHouse&&window.Isle3DLife;
 async function apply({demos,created}){ST().stage='arrive';Cfg.save();
   const want=[...(created?[created.id]:[]),...demos];const L=window.L31;
   for(const id of want)try{L&&L.setIsland(id,true)}catch(_){}
   const lead=want[0];if(lead&&Cfg.v.active!==lead){try{setActive(lead)}catch(_){Cfg.set('active',lead)}}
   for(const c of Chars.list.filter(c=>c.kind==='demo'&&!demos.includes(c.id)))try{L&&L.setIsland(c.id,false)}catch(_){}
-  Cfg.flush();Music.stop();unmount();await wait(450);arrival(Chars.byId(lead)||Chars.active())}
+  ST().lead=lead;Cfg.flush();try{window.Isle3DLife?.sync()}catch(_){}
+  if(I3())return chooseHouse();Music.stop();unmount();await wait(450);arrival(Chars.byId(lead)||Chars.active())}
+function chooseHouse(){ST().stage='house';Cfg.save();backFn=null;const HS=Isle3DHouse.HOUSES,keys=Object.keys(HS);let cur=ST().houseType||keys[0];
+  const s=show(`<div class="ob-page"><div class="ob-head"><small>我的家</small><h2>選一棟喜歡的房子</h2><p>接下來可以把它擺在小島上的任何地方。家裡有床、餐桌、沙發、書櫃和廚房，夥伴會回家睡覺、吃飯、躲雨。</p></div>
+   <div class="ob-strip tall" id="obHouse"></div>
+   <div class="ob-houses">${keys.map(k=>`<button class="ob-house ${k===cur?'on':''}" data-k="h" data-v="${k}"><b>${HS[k].name}</b><small>${HS[k].desc}</small></button>`).join('')}</div>
+   <div class="ob-acts">${btn('go','就是這棟！','primary')}</div></div>`,'obs-page');
+  let pv=new Isle3DPreview(s.querySelector('#obHouse'),{dist:15,y:1.6,fov:32});if(pv.failed)pv=null;
+  const draw=()=>{if(pv){const b=HS[cur].build();pv.setObject(b.g,.9);pv.wantYaw=-.5}};draw();
+  on(s,{h:b=>{cur=b.dataset.v;ST().houseType=cur;s.querySelectorAll('.ob-house').forEach(x=>x.classList.toggle('on',x===b));draw()},
+    go:()=>{ST().houseType=cur;Cfg.save();placeHouse(cur)}})}
+async function placeHouse(type){ST().stage='place';Cfg.save();Music.stop();unmount();await wait(400);try{Nav.go(0)}catch(_){}
+  document.documentElement.classList.add('ob-cine-on');
+  const at=window.Isle3DMain?.defaultSpot?.(type)||{x:-2,z:-2.6};
+  Isle3DHouse.beginPlace(type,{cancel:false,at,onDone:()=>{document.documentElement.classList.remove('ob-cine-on');setTimeout(()=>arrival(Chars.byId(ST().lead)||Chars.active()),500)}});
+  setTimeout(()=>toast('拖曳房子決定位置，可以旋轉方向','home'),600)}
 async function arrival(ch){ST().stage='arrival';Cfg.save();try{Nav.go(0)}catch(_){}
   const cine=el(`<div class="ob-arrive"><div class="ob-lb t"></div><div class="ob-lb b"></div><div class="ob-dlg" role="status"><b class="ob-dn"></b><p class="ob-dt"></p><small>點一下繼續</small></div></div>`);($('#app')||document.body).append(cine);
   document.documentElement.classList.add('ob-cine-on');requestAnimationFrame(()=>cine.classList.add('in'));
-  try{Home.setChar()}catch(_){}try{window.OCSCamera?.focus?.(Home.stage)}catch(_){}
-  await wait(reduce()?300:1700);const lines=greetingFor(ch),dn=cine.querySelector('.ob-dn'),dt=cine.querySelector('.ob-dt');dn.textContent=ch.name;cine.classList.add('talk');
-  for(const line of lines){await typeLine(dt,line);try{Home.stage.actor.dataset.state='happy';setTimeout(()=>{try{Home.stage.actor.dataset.state='idle'}catch(_){}},900)}catch(_){}await tapOrWait(cine,4200)}
+  let a=null;if(I3()){const L=Isle3DLife,E=Isle3D;L.sync();a=L.agent(ch.id);
+    // everyone else waits outside; the new resident steps out of the front door
+    if(a&&E.house){a.inside=true;a.task={type:'inside',why:'rest',t0:E.clock};const d=E.house.door;E.focus({x:d.x,z:d.z},16);E.rig.want.pitch=.62;
+      await wait(1400);L.exitHouse(a);a.thinkT=99;a.task={type:'cmd',to:{x:d.x+Math.sin(E.house.ry)*1.6,z:d.z+Math.cos(E.house.ry)*1.6}};E.rig.follow=a.root;await wait(1800);
+      a.task={type:'do',anim:'look',dur:2.2,t0:E.clock};a.cat.play('look');await wait(1600);a.cat.play('wave');a.cat.expr({eyes:'happy',blush:1},4)}}
+  else{try{Home.setChar()}catch(_){}await wait(reduce()?300:1700)}
+  const lines=greetingFor(ch),dn=cine.querySelector('.ob-dn'),dt=cine.querySelector('.ob-dt');dn.textContent=ch.name;cine.classList.add('talk');
+  for(const line of lines){await typeLine(dt,line);try{if(a){a.cat.play('happy');setTimeout(()=>a.cat.play('talk'),900)}else{Home.stage.actor.dataset.state='happy'}}catch(_){}await tapOrWait(cine,4200)}
   cine.classList.remove('in','talk');document.documentElement.classList.remove('ob-cine-on');setTimeout(()=>cine.remove(),600);
+  if(a){a.thinkT=2;a.task=null;Isle3D.rig.follow=null}
   ST().arrived=1;Cfg.save();await wait(500);tutorial(false)}
 function typeLine(n,t){return new Promise(r=>{n.textContent='';let i=0;const step=()=>{n.textContent=t.slice(0,++i);if(i<t.length)setTimeout(step,reduce()?0:38);else r()};step()})}
 function tapOrWait(n,ms){return new Promise(r=>{let done=false;const f=()=>{if(done)return;done=true;n.removeEventListener('pointerdown',f);r()};n.addEventListener('pointerdown',f);setTimeout(f,ms)})}
 
-/* ---------- 7. interactive tutorial (coach marks on the real UI) ---------- */
-function tutorial(replay){ST().stage='tutorial';Cfg.save();const ch=Chars.active(),me=ch?.data?.speech?.self||'我';
-  const steps=[
-    {t:`這就是我們的小島！${me}帶你認識一下。`},
-    {sel:()=>Home.stage?.actor,t:'先摸摸我的頭吧！點一下我。',wait:'pet'},
-    {sel:'#homeChip',t:'點我的頭像可以切換操控的夥伴；旁邊的數字是等級與星幣。'},
-    {sel:'#hudCap',t:'點這裡可以快速查看大家的心情、肚子餓不餓和現在在做什麼。',wait:'tap'},
-    {sel:'#homeStage',t:'用單指拖曳移動鏡頭、雙指縮放，看看島上的每個角落。',pad:-40},
-    {sel:'#qbag',t:'這是快捷背包：把食物、飲料或玩具直接拖到夥伴身上就能互動。'},
-    {sel:'#questCard',t:'每日任務與夥伴的請求在這裡，完成可以拿到星幣。'},
-    {sel:'#hudRail',t:'更多功能：任務、背包、相機和佈置小島。'},
-    {sel:'.nav-btn[data-tab="1"]',t:'「角色」頁：查看每位夥伴的檔案、編輯、加入小島或設為手機桌寵。'},
-    {sel:'.nav-btn[data-tab="3"]',t:'「探索」：打開世界地圖，到海邊、森林、咖啡館等地方走走。'},
-    {t:'在「設定 → 桌面夥伴」，還能讓我跑到手機桌面上陪你喔！'},
-    {t:replay?'複習完畢！':'準備好了嗎？從今天開始，一起自由生活吧！',final:!replay}];
-  const ui=el(`<div class="ob-tut"><div class="ob-spot"></div><div class="ob-tip"><div class="ob-tip-h"><span class="ob-tav">${thumbHTML(ch)}</span><b>${esc(ch?.name||'')}</b><button class="ob-tskip" data-k="skip">跳過教學</button></div><p></p><div class="ob-tip-a"><small></small><button class="ob-btn primary sm" data-k="next">下一步</button></div></div></div>`);
+/* ---------- 7. interactive tutorial (on the real 3D island UI) ---------- */
+function tutorial(replay){ST().stage='tutorial';Cfg.save();const ch=Chars.active(),me=ch?.data?.speech?.self||'我';const is3d=!!I3();
+  const agentEl=()=>{if(!is3d)return Home.stage?.actor;const a=Isle3DLife.agent(Cfg.v.active);if(!a)return null;const p=a.root.position.clone();p.y+=.8;const q=Isle3D.project(p);const r=Isle3D.renderer.domElement.getBoundingClientRect();return{getBoundingClientRect:()=>({left:r.left+q.x-46,top:r.top+q.y-60,right:r.left+q.x+46,bottom:r.top+q.y+50,width:92,height:110})}};
+  const hold=()=>{if(!is3d)return;const a=Isle3DLife.agent(Cfg.v.active);if(a){if(a.inside)Isle3DLife.exitHouse(a);a.task=null;a.thinkT=40;a.cat.play('idle');Isle3D.focus(a.root.position,17);Isle3D.rig.want.pitch=.7}};
+  const steps=is3d?[
+    {t:`這就是我們的小島！${me}帶你認識一下。`,before:hold},
+    {sel:agentEl,t:'用手指在我身上「上下滑動」，就可以摸摸我喔！',wait:'pet3d',before:hold},
+    {sel:agentEl,t:'點我一下，就能操控我，還會打開互動選單：聊天、誇獎、餵食、送禮……',wait:'menu',before:hold},
+    {t:'點一下草地，我就會走過去。點長椅、花圃、碼頭、營火，我會去那裡做事。',wait:'move',pad:-40},
+    {sel:'.ih-av',t:'這裡是現在操控的夥伴，旁邊是星幣、星鑽、等級與親密度。'},
+    {sel:'.ih-wx',t:'點這裡可以看時間與天氣，也能自訂。下雨天大家會躲雨，淋太久可能會感冒！'},
+    {sel:'.ih-rail [data-k=bag]',t:'背包：把食物、飲料或禮物送給夥伴。每個夥伴都有自己的口味。'},
+    {sel:'.ih-quest',t:'今日委託和夥伴的請求在這裡，完成就能領星幣。'},
+    {sel:'.ih-rail [data-k=house]',t:'點這裡可以走進家裡，使用床、餐桌、沙發和書櫃。'},
+    {sel:'.ih-rail [data-k=map]',t:'世界地圖：海灘、森林、咖啡館、圖書館都能去探險。'},
+    {sel:'.ih-sq[data-k=news]',t:'島嶼日誌：誰和誰變成好朋友、誰吵架了、誰生病了，都會記在這裡。'},
+    {t:replay?'複習完畢！':'準備好了嗎？從今天開始，一起自由生活吧！',final:!replay}]
+   :[{t:`這就是我們的小島！${me}帶你認識一下。`},{sel:()=>Home.stage?.actor,t:'先摸摸我的頭吧！點一下我。',wait:'pet'},{t:replay?'複習完畢！':'一起自由生活吧！',final:!replay}];
+  const ui=el(`<div class="ob-tut" data-emoji-keep><div class="ob-spot"></div><div class="ob-tip"><div class="ob-tip-h"><span class="ob-tav">${thumbHTML(ch)}</span><b>${esc(ch?.name||'')}</b><button class="ob-tskip" data-k="skip">跳過教學</button></div><p></p><div class="ob-tip-a"><small></small><button class="ob-btn primary sm" data-k="next">下一步</button></div></div></div>`);
   ($('#app')||document.body).append(ui);fillIcons(ui);requestAnimationFrame(()=>ui.classList.add('in'));
   const spot=ui.querySelector('.ob-spot'),tip=ui.querySelector('.ob-tip'),txt=tip.querySelector('p'),cnt=tip.querySelector('small'),nb=tip.querySelector('[data-k=next]');
-  let i=0,cleanup=null,petHook=null,raf=0;
+  let i=0,cleanup=null,raf=0;
   const target=s=>!s.sel?null:typeof s.sel==='function'?s.sel():document.querySelector(s.sel);
-  const place=()=>{const s=steps[i],t=target(s);if(t&&t.getBoundingClientRect){const r=t.getBoundingClientRect(),p=s.pad??8,ar=($('#app')||document.body).getBoundingClientRect();
-      spot.style.cssText=`opacity:1;left:${r.left-ar.left-p}px;top:${r.top-ar.top-p}px;width:${r.width+p*2}px;height:${r.height+p*2}px`;
-      const below=r.top-ar.top<ar.height*.5;tip.style.top=below?Math.min(ar.height-190,r.bottom-ar.top+p+12)+'px':'';tip.style.bottom=below?'':Math.max(16,ar.bottom-r.top+p+12)+'px'}
-    else{spot.style.cssText='opacity:0;left:50%;top:50%;width:0;height:0';tip.style.top='';tip.style.bottom='calc(var(--sab) + 110px)'}
+  const place=()=>{const s=steps[i],t=target(s);const ar=($('#app')||document.body).getBoundingClientRect();
+    if(t&&t.getBoundingClientRect){const r=t.getBoundingClientRect(),p=s.pad??8;spot.style.cssText=`opacity:1;left:${r.left-ar.left-p}px;top:${r.top-ar.top-p}px;width:${r.width+p*2}px;height:${r.height+p*2}px`;
+      const below=r.top-ar.top<ar.height*.45;tip.style.top=below?Math.min(ar.height-220,r.bottom-ar.top+p+14)+'px':'';tip.style.bottom=below?'':Math.max(16,ar.bottom-r.top+p+14)+'px'}
+    else{spot.style.cssText='opacity:0;left:50%;top:50%;width:0;height:0';tip.style.top='';tip.style.bottom='calc(var(--sab) + 190px)'}
     raf=requestAnimationFrame(place)};
-  const show_=()=>{cleanup&&cleanup();cleanup=null;const s=steps[i];txt.textContent=s.t;cnt.textContent=`${i+1} / ${steps.length}`;nb.textContent=s.final||i===steps.length-1?'開始生活！':'下一步';nb.hidden=!!s.wait;
-    tip.classList.remove('pop');void tip.offsetWidth;tip.classList.add('pop');
-    if(s.wait==='pet'){const op=Stage.prototype.pet;petHook=op;Stage.prototype.pet=function(){const r=op.apply(this,arguments);if(this===Home.stage){Stage.prototype.pet=op;petHook=null;setTimeout(next,700)}return r};
-      const fb=setTimeout(()=>{nb.hidden=false},6000);cleanup=()=>{clearTimeout(fb);if(petHook){Stage.prototype.pet=petHook;petHook=null}}}
-    if(s.wait==='tap'){const t=target(s);const f=()=>setTimeout(next,900);t&&t.addEventListener('click',f,{once:true,capture:true});const fb=setTimeout(()=>{nb.hidden=false},6000);cleanup=()=>{clearTimeout(fb);t&&t.removeEventListener('click',f,{capture:true});try{window.L31&&document.getElementById('l31Quick')&&L31.quick()}catch(_){}}}};
-  const close=()=>{cleanup&&cleanup();cancelAnimationFrame(raf);ui.classList.remove('in');setTimeout(()=>ui.remove(),500)};
+  const fallback=()=>setTimeout(()=>{nb.hidden=false},9000);
+  const show_=()=>{cleanup&&cleanup();cleanup=null;const s=steps[i];try{s.before&&s.before()}catch(_){}txt.textContent=s.t;cnt.textContent=`${i+1} / ${steps.length}`;nb.textContent=s.final||i===steps.length-1?'開始生活！':'下一步';nb.hidden=!!s.wait;
+    ui.classList.toggle('pass',!!s.wait);tip.classList.remove('pop');void tip.offsetWidth;tip.classList.add('pop');
+    if(s.wait==='pet3d'){const L=Isle3DLife,op=L.petStroke;let n=0;L.petStroke=function(){const r=op.apply(this,arguments);if(++n===4){L.petStroke=op;setTimeout(next,900)}return r};const fb=fallback();cleanup=()=>{clearTimeout(fb);L.petStroke=op}}
+    if(s.wait==='menu'){const fb=fallback();const iv=setInterval(()=>{if(document.querySelector('.im-menu.on')){clearInterval(iv);setTimeout(()=>{try{Isle3DUI.closeMenu()}catch(_){}next()},1600)}},200);cleanup=()=>{clearTimeout(fb);clearInterval(iv)}}
+    if(s.wait==='move'){const L=Isle3DLife,oc=L.command;L.command=function(id,c){const r=oc.apply(this,arguments);L.command=oc;setTimeout(next,1400);return r};const fb=fallback();cleanup=()=>{clearTimeout(fb);L.command=oc}}
+    if(s.wait==='pet'){const op=Stage.prototype.pet;Stage.prototype.pet=function(){const r=op.apply(this,arguments);if(this===Home.stage){Stage.prototype.pet=op;setTimeout(next,700)}return r};const fb=fallback();cleanup=()=>{clearTimeout(fb);Stage.prototype.pet=op}}};
+  const close=()=>{cleanup&&cleanup();cancelAnimationFrame(raf);ui.classList.remove('in');setTimeout(()=>ui.remove(),500);if(is3d){const a=Isle3DLife.agent(Cfg.v.active);if(a)a.thinkT=2}};
   function next(){if(!ui.isConnected)return;if(i>=steps.length-1){close();if(!replay)finish({gift:true});return}i++;show_()}
   ui.addEventListener('click',e=>{const k=e.target.closest('[data-k]')?.dataset.k;if(!k)return;buzz(6);if(k==='next')next();if(k==='skip'){close();if(!replay)finish({gift:true})}});
   show_();place()}
@@ -236,7 +282,7 @@ function finish(o={}){const s=ST();s.done=true;s.at=s.at||Date.now();s.stage='do
   if(o.gift){try{if(window.Econ&&Econ.pay('ob_newlife_v1','gift',100))toast('新生活禮物：+100 星幣','sparkle');else{Eco.v.coins+=100;Eco.save();HUD.refresh();toast('新生活禮物：+100 星幣','sparkle')}}catch(_){}}
   else if(!o.silent)toast('歡迎來到小島！','sparkle')}
 function skipAll(){Music.stop();unmount();const c=document.querySelector('.ob-tut');c&&c.remove();const a=document.querySelector('.ob-arrive');a&&a.remove();document.documentElement.classList.remove('ob-cine-on');finish({silent:true})}
-function resume(){const s=ST();if(s.stage==='tutorial'||s.stage==='arrival'||s.arrived)return tutorial(false);if(s.stage==='create'||s.stage==='demos'||s.stage==='mode')return(mount(),chooseMode());welcome(false)}
+function resume(){const s=ST();if(s.stage==='tutorial'||s.stage==='arrival'||s.arrived)return tutorial(false);if((s.stage==='house'||s.stage==='place')&&I3()){mount();return chooseHouse()}if(s.stage==='create'||s.stage==='demos'||s.stage==='mode')return(mount(),chooseMode());welcome(false)}
 
 /* ---------- settings rows ---------- */
 function settingsRows(body){if(body.querySelector('#obSec'))return;const wrap=el('<div id="obSec"><div class="sec">開場與教學</div><div class="group"></div></div>'),g=wrap.querySelector('.group');
@@ -248,7 +294,7 @@ function settingsRows(body){if(body.querySelector('#obSec'))return;const wrap=el
 window.OCSOnboarding={start:()=>welcome(false),replayOpening:()=>welcome(true),replayTutorial:()=>tutorial(true),skipAll,state:ST,greetingFor,personalityLine};
 
 /* ---------- boot ---------- */
-const t=setInterval(()=>{if(typeof Settings==='undefined'||!Settings.body||!window.L31||!Chars.list.length||!Home.stage)return;clearInterval(t);
+const bootAt=Date.now();const t=setInterval(()=>{if(typeof Settings==='undefined'||!Settings.body||!window.L31||!Chars.list.length||!Home.stage)return;if(window.Isle3D&&!Isle3D.ready&&Date.now()-bootAt<6000)return;clearInterval(t);
   try{const mk=Settings.make;Settings.make=function(){mk.apply(this,arguments);try{settingsRows(this.body)}catch(e){console.error(e)}};settingsRows(Settings.body)}catch(e){console.error(e)}
   const s=ST();
   if(s.done)return;

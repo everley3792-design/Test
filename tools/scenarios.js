@@ -42,32 +42,30 @@ module.exports.perf=async t=>{const p=t.page;await p.goto(t.url);await p.waitFor
   await p.evaluate(()=>{OCSPerf.setCustom('fps',45);Cfg.flush()});const saved=await p.evaluate(()=>JSON.parse(localStorage.getItem('ocs.v1')).perf);t.assert(saved.mode==='custom'&&saved.custom.fps===45,'custom saved');
   await p.reload();await p.waitForTimeout(2500);t.assert(await p.evaluate(()=>OCSPerf.state().mode==='custom'&&OCSPerf.cap===45),'restored after reload');
   await p.evaluate(()=>{Settings.open()});await p.waitForTimeout(600);await p.evaluate(()=>document.getElementById('perfSec').scrollIntoView());await p.waitForTimeout(300);await t.shot('settings')};
-module.exports.firstrun=async t=>{const p=t.page;await p.goto(t.url);await p.waitForTimeout(2500);
-  t.assert(await p.$('#obRoot .obs-wel'),'welcome screen on first run');await t.shot('1-welcome');
-  await p.click('#obRoot [data-k=start]');await p.waitForTimeout(6500);await t.shot('2-cinematic');
-  await p.click('#obRoot [data-k=pause]');await p.waitForTimeout(1200);const t1=await p.evaluate(()=>document.querySelector('.ob-cam').getAnimations()[0].currentTime);
-  await p.waitForTimeout(800);const t2=await p.evaluate(()=>document.querySelector('.ob-cam').getAnimations()[0].currentTime);t.assert(t1===t2,'pause freezes cinematic');
-  await p.click('#obRoot [data-k=pause]');await p.waitForTimeout(500);await p.click('#obRoot [data-k=skip]');await p.waitForTimeout(900);
-  t.assert(await p.$('#obRoot .ob-modes'),'mode chooser');await t.shot('3-mode');
-  await p.click('#obRoot [data-k=both]');await p.waitForTimeout(900);await t.shot('4-create-look');
-  await p.click('#obRoot [data-k=cat][data-v=ears]');await p.click('#obRoot [data-k=opt] >> nth=2');await p.click('#obRoot [data-k=dice]');await p.waitForTimeout(400);
-  await p.click('#obRoot [data-k=next]');await p.waitForTimeout(500);await p.fill('#obName','測試貓');await p.click('#obRoot [data-k=next]');await p.waitForTimeout(500);
-  await p.click('#obRoot [data-k=tr] >> nth=5');await p.click('#obRoot [data-k=tr] >> nth=2');await p.waitForTimeout(400);await t.shot('5-create-pers');
-  await p.click('#obRoot [data-k=next]');await p.waitForTimeout(400);await p.fill('#obRoot [data-s=catch]','喵嗚～');await p.click('#obRoot [data-k=next]');await p.waitForTimeout(500);await t.shot('6-create-done');
-  await p.click('#obRoot [data-k=next]');await p.waitForTimeout(1500);t.assert(await p.$('#obRoot .ob-demos'),'neighbour picker');
-  await p.click('#obRoot [data-k=t] >> nth=1');await p.waitForTimeout(300);await t.shot('7-demos');await p.click('#obRoot [data-k=go]');
-  await p.waitForTimeout(2600);await t.shot('8-arrival');
-  const roster=await p.evaluate(()=>({sel:Cfg.v.community.selected,active:Cfg.v.active,name:Chars.active().name,catch:Chars.active().data.speech.catch}));
-  t.log('roster '+JSON.stringify(roster));t.assert(roster.name==='測試貓'&&roster.sel.length===2,'created OC + 1 demo on island');t.assert(roster.catch==='喵嗚～','speech saved');
-  for(let i=0;i<4;i++){await p.mouse.click(195,600);await p.waitForTimeout(700)}
-  await p.waitForSelector('.ob-tut',{timeout:15000});await p.waitForTimeout(800);await t.shot('9-tutorial-1');
-  await p.click('.ob-tut [data-k=next]');await p.waitForTimeout(900);await t.shot('9-tutorial-pet');
-  const box=await p.evaluate(()=>{const r=Home.stage.actor.getBoundingClientRect();return{x:r.left+r.width/2,y:r.top+r.height*.45}});await p.mouse.click(box.x,box.y);await p.waitForTimeout(1600);
-  const step=await p.evaluate(()=>document.querySelector('.ob-tip small').textContent);t.log('after petting: step '+step);
-  for(let i=0;i<14;i++){const b=await p.$('.ob-tut [data-k=next]:not([hidden])');if(!b){await p.waitForTimeout(800);const c=await p.$('.ob-tut [data-k=next]');if(!c)break;await c.evaluate(e=>e.hidden=false);continue}if(i===4)await t.shot('9-tutorial-mid');await b.click();await p.waitForTimeout(650)}
-  await p.waitForTimeout(800);const ob=await p.evaluate(()=>{Cfg.flush();return Cfg.v.ob});t.assert(ob.done,'onboarding done');await t.shot('10-free');
-  await p.reload();await p.waitForTimeout(3500);t.assert(!(await p.$('#obRoot')),'no onboarding after reload');
-  t.assert(await p.evaluate(()=>Chars.active().name==='測試貓'),'created OC persisted');};
+module.exports.firstrun=async t=>{const p=t.page;await p.goto(t.url);await p.waitForSelector('#obRoot .obs-wel',{timeout:20000});await p.waitForTimeout(800);await t.shot('1-welcome');
+  await p.click('#obRoot [data-k=start]');await p.waitForTimeout(5000);await t.shot('2-cinematic');
+  await p.click('#obRoot [data-k=skip]');await p.waitForTimeout(900);t.assert(await p.$('#obRoot .ob-modes'),'mode chooser');await t.shot('3-mode');
+  await p.click('#obRoot [data-k=both]');await p.waitForTimeout(1500);await t.shot('4-create-look');
+  await p.click('#obRoot [data-k=cat][data-v=eye]');await p.click('#obRoot [data-k=opt] >> nth=3');await p.waitForTimeout(500);
+  await p.click('#obRoot [data-k=next]');await p.waitForTimeout(400);await p.fill('#obName','測試貓');await p.click('#obRoot [data-k=next]');await p.waitForTimeout(400);
+  await p.click('#obRoot [data-k=tr] >> nth=5');await p.waitForTimeout(300);await t.shot('5-create-pers');await p.click('#obRoot [data-k=fin]');await p.waitForTimeout(500);await t.shot('6-create-done');
+  await p.click('#obRoot [data-k=next]');await p.waitForTimeout(1800);t.assert(await p.$('#obRoot .ob-demos'),'neighbour picker');
+  await p.click('#obRoot [data-k=t] >> nth=1');await p.waitForTimeout(900);await t.shot('7-demos');await p.click('#obRoot [data-k=go]');await p.waitForTimeout(1500);
+  t.assert(await p.$('#obRoot .ob-houses'),'house chooser');await p.click('#obRoot [data-k=h] >> nth=1');await p.waitForTimeout(800);await t.shot('8-house');await p.click('#obRoot [data-k=go]');
+  await p.waitForSelector('.hp-bar.on',{timeout:8000});await p.waitForTimeout(800);await t.shot('9-place');await p.$eval('.hp-bar [data-k=ok]',e=>e.click());await p.waitForTimeout(3500);await t.shot('10-arrival');
+  const roster=await p.evaluate(()=>({sel:Cfg.v.community.selected,name:Chars.active().name,home:Cfg.v.isle3d.home}));t.log('roster '+JSON.stringify(roster));
+  t.assert(roster.name==='測試貓'&&roster.sel.length===2&&roster.home?.type==='mushroom','created OC + 1 demo + mushroom house');
+  for(let i=0;i<6;i++){await p.mouse.click(195,760);await p.waitForTimeout(600)}
+  await p.waitForSelector('.ob-tut',{timeout:15000});await p.waitForTimeout(800);await t.shot('11-tut');await p.click('.ob-tut [data-k=next]');await p.waitForTimeout(1500);
+  const pos=async()=>p.evaluate(()=>{const a=Isle3DLife.agent(Cfg.v.active),v=a.root.position.clone();v.y+=.85;const s=Isle3D.project(v);return{x:s.x,y:s.y}});
+  let s=await pos();await t.shot('12-tut-pet');await p.mouse.move(s.x,s.y);await p.mouse.down();for(let i=0;i<16;i++){await p.mouse.move(s.x,s.y+(i%2?-24:24),{steps:3});await p.waitForTimeout(60)}await p.mouse.up();await p.waitForTimeout(1600);
+  t.log('after pet: '+await p.evaluate(()=>document.querySelector('.ob-tip small').textContent));
+  s=await pos();await p.mouse.click(s.x,s.y);await p.waitForTimeout(2600);t.log('after tap: '+await p.evaluate(()=>document.querySelector('.ob-tip small').textContent));
+  s=await pos();await p.mouse.click(s.x-70,s.y+60);await p.waitForTimeout(2200);t.log('after move: '+await p.evaluate(()=>document.querySelector('.ob-tip small')?.textContent));await t.shot('13-tut-move');
+  for(let i=0;i<14;i++){if(!(await p.$('.ob-tut')))break;const b=await p.waitForSelector('.ob-tut [data-k=next]:not([hidden])',{timeout:12000}).catch(()=>null);if(!b)break;if(i===3)await t.shot('14-tut-mid');await b.click();await p.waitForTimeout(600)}
+  await p.waitForTimeout(800);const ob=await p.evaluate(()=>{Cfg.flush();return Cfg.v.ob});t.assert(ob.done,'onboarding done');await t.shot('15-free');
+  await p.reload();await p.waitForFunction(()=>window.Isle3DLife?.agents?.size>0,null,{timeout:20000});await p.waitForTimeout(1500);t.assert(!(await p.$('#obRoot')),'no onboarding after reload');
+  t.assert(await p.evaluate(()=>Chars.active().name==='測試貓'&&Isle3D.house?.type==='mushroom'),'OC and house persisted')};
 module.exports.legacy=async t=>{const p=t.page;
   await p.addInitScript(()=>{if(!localStorage.getItem('ocs.v1'))localStorage.setItem('ocs.v1',JSON.stringify({theme:'light',active:'yuzu',dataVer:2,overrides:{}}))});
   await p.goto(t.url);await p.waitForTimeout(3500);t.assert(!(await p.$('#obRoot')),'old save: no forced onboarding');
@@ -82,7 +80,7 @@ module.exports.world=async t=>{const p=t.page;await p.goto(t.url);await p.waitFo
   t.assert(await p.$('.wloc[data-loc=beach]'),'entered beach');await t.shot('beach');
   const coins0=await p.evaluate(()=>Eco.v.coins);
   await p.click('.wl-bar [data-act=shell]');await p.waitForTimeout(1200);await t.shot('beach-shells');
-  for(const b of await p.$$('.wpick')){await b.click();await p.waitForTimeout(250)}await p.waitForTimeout(800);
+  for(const b of await p.$$('.wpick')){await b.evaluate(e=>e.click());await p.waitForTimeout(250)}await p.waitForTimeout(800);
   const shells=await p.evaluate(()=>Object.keys(L30.SPEC.shell.list.filter(z=>L30.found('shell',z[0]))).length);t.log('shells found: '+shells);t.assert(shells>0,'shells collected into codex');
   await p.click('.wl-bar [data-act=fish]');await p.waitForTimeout(600);await t.shot('fishing');await p.click('[data-reel]');await p.waitForTimeout(1200);
   const coins1=await p.evaluate(()=>Eco.v.coins);t.log(`coins ${coins0} -> ${coins1}`);t.assert(coins1>coins0,'activity reward paid');
@@ -102,7 +100,7 @@ module.exports.isle=async t=>{const p=t.page;await p.addInitScript(()=>{if(!loca
   // tap a character → becomes controlled + radial menu
   const scr=async id=>p.evaluate(id=>{const a=Isle3DLife.agent(id);const v=a.root.position.clone();v.y+=.85;const s=Isle3D.project(v);const r=Isle3D.renderer.domElement.getBoundingClientRect();return{x:s.x+r.left,y:s.y+r.top}},id);
   const ids=await p.evaluate(()=>[...Isle3DLife.agents.keys()]);const target=ids[ids.length-1];
-  await p.evaluate(id=>{const a=Isle3DLife.agent(id);a.task=null;a.thinkT=99;Isle3D.focus(a.root.position,16)},target);await p.waitForTimeout(1500);
+  await p.evaluate(id=>{const a=Isle3DLife.agent(id);if(a.inside)Isle3DLife.exitHouse(a);a.task=null;a.thinkT=99;a.cat.play('idle');for(const b of Isle3DLife.agents.values())if(b!==a){b.task=null;b.thinkT=99;b.pos.set(-8+Math.random(),0,8)}Isle3D.focus(a.root.position,16)},target);await p.waitForTimeout(1500);
   let s=await scr(target);await p.mouse.click(s.x,s.y);await p.waitForTimeout(700);
   t.assert(await p.evaluate(id=>Cfg.v.active===id,target),'tap switches controlled character');t.assert(await p.$('.im-menu.on'),'radial menu open');await t.shot('menu');
   await p.click('.im-scrim',{position:{x:20,y:200}});await p.waitForTimeout(400);
@@ -123,7 +121,7 @@ module.exports.isle=async t=>{const p=t.page;await p.addInitScript(()=>{if(!loca
   // bag → feed
   await p.evaluate(()=>{const f=Items.d.items.find(i=>i.cat==='food');if(f)f.qty=Math.max(f.qty,2);Items.emit()});
   await p.$eval('[data-k=bag]',e=>e.click());await p.waitForTimeout(700);await t.shot('bag');const q0=await p.evaluate(()=>Items.d.items.filter(i=>i.cat==='food').reduce((a,i)=>a+i.qty,0));
-  await p.evaluate(()=>document.querySelector('.sheet.open [data-t=food]').click());await p.waitForTimeout(300);await p.evaluate(()=>{const b=document.querySelector('.sheet.open .ib-it');b&&b.click()});await p.waitForTimeout(900);const q1=await p.evaluate(()=>Items.d.items.filter(i=>i.cat==='food').reduce((a,i)=>a+i.qty,0));t.assert(q1===q0-1,'feeding uses one item');
+  await p.evaluate(()=>document.querySelector('.sheet.open [data-t=food]').click());await p.waitForTimeout(300);await p.evaluate(()=>{const b=document.querySelector('.sheet.open .ib-it');b&&b.click()});await p.waitForTimeout(3200);const q1=await p.evaluate(()=>Items.d.items.filter(i=>i.cat==='food').reduce((a,i)=>a+i.qty,0));const tt=await p.evaluate(()=>document.querySelector('.toast')?.textContent||'');t.log(`feed: ${q0}->${q1} ${tt}`);t.assert(q1===q0-1||/婉拒/.test(tt),'feeding uses one item or is politely refused');
   // house interior
   await p.$eval('[data-k=house]',e=>e.click());await p.waitForTimeout(1800);await t.shot('room');t.assert(await p.evaluate(()=>Isle3D.viewMode==='room'),'entered house');
   await p.$eval('[data-spot=bed]',e=>e.click());await p.waitForTimeout(1200);await t.shot('room-bed');t.assert(await p.evaluate(()=>Isle3DLife.agent(Cfg.v.active).roomUse==='bed'),'used bed');

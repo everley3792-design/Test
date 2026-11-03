@@ -154,7 +154,7 @@ function steer(a,tx,tz,dt,run){const dx=tx-a.pos.x,dz=tz-a.pos.z,d=Math.hypot(dx
   const vl=Math.hypot(vx,vz)||1;vx/=vl;vz/=vl;const sp=(run?2.6:1.15)*a.speedMul();
   let nx=a.pos.x+vx*sp*dt,nz=a.pos.z+vz*sp*dt;if(!E.inside(nx,nz,.8)){nx=a.pos.x;nz=a.pos.z;a.stuck=(a.stuck||0)+dt}
   const moved=Math.hypot(nx-a.pos.x,nz-a.pos.z);a.pos.x=nx;a.pos.z=nz;a.vel=moved/dt;a.cat.walkPh+=moved/(run?.42:.3)*Math.PI;
-  a.yaw=lerpA(a.yaw,Math.atan2(vx,vz),1-Math.exp(-dt*10));if(moved<sp*dt*.2)a.stuck=(a.stuck||0)+dt;else a.stuck=0;
+  const py=a.yaw;a.yaw=lerpA(a.yaw,Math.atan2(vx,vz),1-Math.exp(-dt*10));a.cat.turn=((a.yaw-py+Math.PI*3)%(Math.PI*2)-Math.PI)/Math.max(dt,1e-3);a.cat.accel=(moved/dt-(a.vel||0))/Math.max(dt,1e-3)*.05;if(moved<sp*dt*.2)a.stuck=(a.stuck||0)+dt;else a.stuck=0;
   return d<.35||(a.stuck>2.5)}
 
 /* ---------- per-agent update ---------- */

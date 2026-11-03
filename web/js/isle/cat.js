@@ -161,7 +161,7 @@ class Cat{
     const P={hipsY:0,lean:0,roll:0,twist:0,headX:0,headY:0,headZ:0,armLx:0,armRx:0,armLz:-.35,armRz:.35,legL:0,legR:0,tailCurl:.35,tailSway:1,earL:0,earR:0,lie:0,sq:1,bodyY:0};
     const breathe=Math.sin(c*2.2)*.012,sp=this.speed;
     switch(this.act){
-      case 'walk':case 'run':{const run=this.act==='run',ph=this.walkPh,amp=run?.95:.62;P.legL=Math.sin(ph)*amp;P.legR=-Math.sin(ph)*amp;P.armLx=-Math.sin(ph)*(run?.9:.55);P.armRx=Math.sin(ph)*(run?.9:.55);
+      case 'walk':case 'run':{const run=this.act==='run',ph=this.walkPh,amp=run?.95:.62;P.legL=Math.sin(ph)*amp;P.legR=-Math.sin(ph)*amp;P.sq=1-Math.pow(Math.abs(Math.cos(ph)),6)*(run?.06:.035);P.headY=Math.sin(ph-.6)*.06;P.armLx=-Math.sin(ph)*(run?.9:.55);P.armRx=Math.sin(ph)*(run?.9:.55);
         P.armLz=run?-.6:-.42;P.armRz=-P.armLz;P.hipsY=Math.abs(Math.cos(ph))*(run?.09:.05);P.lean=run?.22:.07;P.roll=Math.sin(ph)*(run?.06:.045);P.twist=Math.sin(ph)*.08;P.headX=-P.lean*.6+Math.cos(ph*2)*.03;P.headZ=-P.roll*.6;P.tailSway=run?2.2:1.4;P.tailCurl=run?.15:.3;break}
       case 'sit':P.hipsY=-.24;P.legL=-1.45;P.legR=-1.35;P.armLx=-.5;P.armRx=-.5;P.armLz=-.18;P.armRz=.18;P.tailCurl=.7;P.headX=.06;break;
       case 'sleep':P.lie=1;P.hipsY=-.12;P.legL=-.9;P.legR=-1.1;P.armLx=-1.2;P.armRx=-.9;P.tailCurl=1.1;P.tailSway=.2;P.headX=.2;break;
@@ -184,6 +184,7 @@ class Cat{
       case 'fall':P.armLz=-2.3;P.armRz=2.3;P.legL=.3;P.legR=-.2;P.sq=1.05;break;
       default:{ // idle: weight shift + glance around
         P.roll=Math.sin(c*.7)*.025;P.headY=this.lookYaw;P.headX=this.lookPitch;P.armLx=Math.sin(c*.9)*.05;P.armRx=-Math.sin(c*.9)*.05}}
+    P.roll+=clamp(this.turn||0,-2.5,2.5)*.06;P.lean+=clamp(this.accel||0,-3,3)*.03;
     if(this.act!=='sleep'){P.sq*=1+breathe}else{P.sq*=1+Math.sin(c*1.3)*.03}
     // idle micro-behaviours
     if((this.lookT-=dt)<=0){this.lookT=2+Math.random()*4;this.lookYawT=(Math.random()-.5)*.9;this.lookPitchT=(Math.random()-.4)*.25}
@@ -202,7 +203,7 @@ class Cat{
     if(this.faceUntil&&E.clock>this.faceUntil){this.face={};this.faceUntil=0;this.faceDirty=true}
     if(this.face.talk&&Math.random()<.35)this.faceDirty=true;
     this.redrawFace();
-    this.shadow.scale.setScalar(1-C.hipsY*.8+C.lie*.3)}
+    this.shadow.scale.setScalar(1-C.hipsY*.8+C.lie*.3);this.turn=(this.turn||0)*Math.exp(-dt*6);this.accel=(this.accel||0)*Math.exp(-dt*6)}
   updateSprite(dt){const c=this.clockT,sp=this.sprite,moving=this.act==='walk'||this.act==='run';
     const bob=moving?Math.abs(Math.sin(this.walkPh))*.08:this.act==='happy'?Math.abs(Math.sin(this.t*9))*.3:0;sp.position.y=bob;const br=1+Math.sin(c*2.2)*.015;
     const base=sp.userData.base||(sp.userData.base=sp.scale.clone());sp.scale.set(base.x*(this.faceDir||1)*this.flipX/br,base.y*br*(this.act==='sleep'?.92:1),1);sp.material.rotation=moving?Math.sin(this.walkPh)*.05:this.act==='sleep'?.0:0}

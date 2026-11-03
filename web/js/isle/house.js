@@ -123,7 +123,7 @@ function buildRoom(){if(room)return room;room=new T.Group();room.position.copy(R
   room.traverse(o=>{if(o.isMesh){o.castShadow=false;o.receiveShadow=false}});return room}
 H.SPOTS=SPOTS;
 H.enterView=function(){buildRoom();if(E.viewMode==='room')return;E.viewMode='room';H.saved=Object.assign({},E.rig.want);roomLight.visible=true;room.userData.fill.visible=true;
-  Object.assign(E.rig.want,{tx:ROOM.x,tz:ROOM.z+.2,dist:15,pitch:.88,yaw:-.25});E.rig.follow=null;document.documentElement.classList.add('in-room');H.emit('room',true);E.kick()};
+  Object.assign(E.rig.want,{tx:ROOM.x-.3,tz:ROOM.z-.4,dist:26,pitch:1.02,yaw:-.18});E.rig.follow=null;document.documentElement.classList.add('in-room');H.emit('room',true);E.kick()};
 H.exitView=function(){if(E.viewMode!=='room')return;E.viewMode='island';roomLight.visible=false;room.userData.fill.visible=false;Object.assign(E.rig.want,H.saved||{});document.documentElement.classList.remove('in-room');
   for(const a of(window.Isle3DLife?.agents||new Map()).values())if(a.inside&&a.roomUse){a.roomUse=null}H.emit('room',false);E.kick()};
 const ls=new Set();H.on=f=>ls.add(f);H.emit=(t,v)=>ls.forEach(f=>{try{f(t,v)}catch(_){}});

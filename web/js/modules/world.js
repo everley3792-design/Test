@@ -139,7 +139,8 @@ function fishing(){const lead=cur.actors[0],sk=(()=>{try{return L30_().lv(lead.c
 /* tap-to-collect items spawned on the ground */
 function spawnPick(cat,glow,n){use(cur.id+':'+(cat==='shell'?'shell':'forage'));refreshCaps();const fx=cur.root.querySelector('.ws-fx');let left=n;
   panel(`<div class="wg"><b>${cat==='shell'?'撿貝殼':'採集'}</b><p>點一下閃閃發光的地方！</p></div>`,true);
-  for(let i=0;i<n;i++){const z=roll(cat),d=el(`<button class="wpick" style="left:${8+Math.random()*82}%;top:${58+Math.random()*16}%;--c:${z[2]};--g:${glow}" aria-label="撿起來"><i></i></button>`);fx.append(d);
+  const spots=[];const spotFor=()=>{for(let k=0;k<30;k++){const x=8+Math.random()*82,y=58+Math.random()*16;if(spots.every(([a,b])=>Math.hypot((a-x)*3.9,(b-y)*8.4)>58)){spots.push([x,y]);return[x,y]}}const r=[8+Math.random()*82,58+Math.random()*16];spots.push(r);return r};
+  for(let i=0;i<n;i++){const z=roll(cat),[sx,sy]=spotFor(),d=el(`<button class="wpick" style="left:${sx}%;top:${sy}%;--c:${z[2]};--g:${glow}" aria-label="撿起來"><i></i></button>`);fx.append(d);
     d.animate([{transform:'scale(0)'},{transform:'scale(1)'}],{duration:400,delay:i*120,easing:'cubic-bezier(.34,1.5,.64,1)',fill:'backwards'});
     d.onclick=()=>{buzz(8);const who=pick(cur.actors);found(cat,z,who.c);d.animate([{transform:'scale(1)',opacity:1},{transform:'translateY(-30px) scale(1.3)',opacity:0}],{duration:450,fill:'forwards'}).finished.then(()=>d.remove());
       if(--left===0){memoAll([who.c],cat==='shell'?'在海灘撿了好多貝殼':'在森林採集了好多東西',LOC[cur.id].n);reward(cat+used(cur.id+':'+(cat==='shell'?'shell':'forage')),5,'收穫滿滿');setTimeout(closePanel,500)}}}}

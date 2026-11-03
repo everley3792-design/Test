@@ -148,3 +148,17 @@ html.ob-cine-on #app :is(.hud-top,.hud-rail,.hud-qa,.hud-quest,.qbag,.nav,#hudCl
 
 html.ob-open :is(.l30-unlock,.toast){visibility:hidden!important}
 .ob.behind{opacity:0;pointer-events:none}
+
+/* 3.4: 3D onboarding */
+.ob.see{background:transparent;pointer-events:none}.ob.see .ob-ctl,.ob.see .ob-ctl *{pointer-events:auto}
+.ob-cine3d{position:absolute;inset:0}.ob-cine3d .ob-bars i{background:#1C252C}
+.ob-cine3d .ob-cap p{color:#fff;text-shadow:0 2px 14px rgba(20,40,60,.55),0 0 2px rgba(20,40,60,.4)}
+html.ob-open #ihud,html.ob-open #nav,html.ob-cine-on #ihud,html.ob-cine-on #nav,html.ob-cine-on #isleLabels .il-emote{opacity:0;pointer-events:none;transition:opacity .4s}
+.ob-strip{height:min(34vh,260px);margin:0 14px 8px;border-radius:26px;background:linear-gradient(180deg,#D9EEF8,#F3EEE2);overflow:hidden;position:relative}
+.ob-strip.tall{height:min(38vh,300px)}.ob-strip canvas,.ob-prev canvas{display:block;width:100%;height:100%;touch-action:none}
+.ob-prev.is3d{background:radial-gradient(circle at 50% 60%,#FFFDF6 0 50%,#E3F1F8 100%)}
+.ob-demo .ob-dthumb{width:56px;height:56px;border-radius:50%;overflow:hidden;background:#fff}.ob-demo .ob-dthumb .thumb{width:100%;height:100%}
+.ob-houses{display:grid;gap:8px;padding:0 16px;overflow:auto}
+.ob-house{text-align:left;border:2px solid transparent;border-radius:18px;background:var(--surface);padding:10px 14px;font:inherit;color:var(--ink);box-shadow:var(--sh-1)}.ob-house.on{border-color:var(--accent);background:var(--accent-soft)}
+.ob-house b{display:block;font-size:15px}.ob-house small{color:var(--ink-2);font-size:12px}
+html[data-theme=dark] .ob-strip{background:linear-gradient(180deg,#2C3E58,#2A3440)}
