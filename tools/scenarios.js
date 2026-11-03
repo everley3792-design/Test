@@ -95,3 +95,43 @@ module.exports.world=async t=>{const p=t.page;await p.goto(t.url);await p.waitFo
   const before=await p.evaluate(()=>Eco.v.coins);await p.$eval('.wmenu [data-d]',e=>e.click());await p.waitForTimeout(800);const after=await p.evaluate(()=>Eco.v.coins);t.log(`cafe spend ${before} -> ${after}`);t.assert(after<before,'drinks cost coins');
   await p.evaluate(()=>OCSWorld.leave());await p.evaluate(()=>Cfg.flush());await p.reload();await p.waitForTimeout(3000);
   const v=await p.evaluate(()=>Cfg.v.world.visits);t.log('visits '+JSON.stringify(v));t.assert(v.beach===1&&v.forest===1,'visits persisted')};
+const GLARGS=['--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader'];module.exports.GLARGS=GLARGS;
+module.exports.isle=async t=>{const p=t.page;await p.addInitScript(()=>{if(!localStorage.getItem('ocs.v1'))localStorage.setItem('ocs.v1',JSON.stringify({ob:{done:true},dataVer:2,isle3d:{timeOverride:15}}))});
+  await p.goto(t.url);await p.waitForFunction(()=>window.Isle3DLife?.agents?.size>0,null,{timeout:20000});await p.waitForTimeout(2500);await t.shot('home');
+  const n=await p.evaluate(()=>Isle3DLife.agents.size);t.log('agents '+n);t.assert(n>=1,'agents spawned');t.assert(await p.evaluate(()=>!!Isle3D.house),'default house placed');
+  // tap a character → becomes controlled + radial menu
+  const scr=async id=>p.evaluate(id=>{const a=Isle3DLife.agent(id);const v=a.root.position.clone();v.y+=.85;const s=Isle3D.project(v);const r=Isle3D.renderer.domElement.getBoundingClientRect();return{x:s.x+r.left,y:s.y+r.top}},id);
+  const ids=await p.evaluate(()=>[...Isle3DLife.agents.keys()]);const target=ids[ids.length-1];
+  await p.evaluate(id=>{const a=Isle3DLife.agent(id);a.task=null;a.thinkT=99;Isle3D.focus(a.root.position,16)},target);await p.waitForTimeout(1500);
+  let s=await scr(target);await p.mouse.click(s.x,s.y);await p.waitForTimeout(700);
+  t.assert(await p.evaluate(id=>Cfg.v.active===id,target),'tap switches controlled character');t.assert(await p.$('.im-menu.on'),'radial menu open');await t.shot('menu');
+  await p.click('.im-scrim',{position:{x:20,y:200}});await p.waitForTimeout(400);
+  // stroke up/down on the character → petting
+  s=await scr(target);const bond0=await p.evaluate(id=>Eco.v.bond[id]||0,target);
+  await p.mouse.move(s.x,s.y);await p.mouse.down();for(let i=0;i<14;i++){await p.mouse.move(s.x,s.y+(i%2?-24:24),{steps:3});await p.waitForTimeout(60)}
+  const petting=await p.evaluate(id=>Isle3DLife.agent(id).petting,target);await t.shot('petting');await p.mouse.up();await p.waitForTimeout(500);
+  t.assert(petting,'stroking pets the character');t.log('bond '+bond0+' -> '+await p.evaluate(id=>Eco.v.bond[id]||0,target));
+  // tap ground → walk there
+  const before=await p.evaluate(id=>Isle3DLife.agent(id).pos.clone(),target);await p.mouse.click(120,560);await p.waitForTimeout(2500);
+  const moved=await p.evaluate(([id,b])=>Isle3DLife.agent(id).pos.distanceTo(new THREE.Vector3(b.x,b.y,b.z)),[target,before]);t.log('moved '+moved.toFixed(2));t.assert(moved>.3,'tap ground moves controlled character');
+  // quests: make a job ready then claim from the panel
+  await p.evaluate(()=>{Econ.roll();const j=Econ.s.jobs[0];j.p=j.n;Eco.save()});const c0=await p.evaluate(()=>Eco.v.coins);
+  await p.$eval('.ih-quest',e=>e.click());await p.waitForTimeout(800);await t.shot('quests');
+  const claimed=await p.evaluate(()=>{const b=[...document.querySelectorAll('.sheet.open [data-job]')].find(x=>!x.disabled);if(b){b.click();return true}return false});await p.waitForTimeout(600);
+  const c1=await p.evaluate(()=>Eco.v.coins);t.log(`claim ${claimed} coins ${c0} -> ${c1}`);t.assert(c1>c0,'quest reward claimed');
+  await p.evaluate(()=>document.querySelector('.sheet.open')&&Ov.back());await p.waitForTimeout(400);
+  // bag → feed
+  await p.evaluate(()=>{const f=Items.d.items.find(i=>i.cat==='food');if(f)f.qty=Math.max(f.qty,2);Items.emit()});
+  await p.$eval('[data-k=bag]',e=>e.click());await p.waitForTimeout(700);await t.shot('bag');const q0=await p.evaluate(()=>Items.d.items.filter(i=>i.cat==='food').reduce((a,i)=>a+i.qty,0));
+  await p.evaluate(()=>document.querySelector('.sheet.open [data-t=food]').click());await p.waitForTimeout(300);await p.evaluate(()=>{const b=document.querySelector('.sheet.open .ib-it');b&&b.click()});await p.waitForTimeout(900);const q1=await p.evaluate(()=>Items.d.items.filter(i=>i.cat==='food').reduce((a,i)=>a+i.qty,0));t.assert(q1===q0-1,'feeding uses one item');
+  // house interior
+  await p.$eval('[data-k=house]',e=>e.click());await p.waitForTimeout(1800);await t.shot('room');t.assert(await p.evaluate(()=>Isle3D.viewMode==='room'),'entered house');
+  await p.$eval('[data-spot=bed]',e=>e.click());await p.waitForTimeout(1200);await t.shot('room-bed');t.assert(await p.evaluate(()=>Isle3DLife.agent(Cfg.v.active).roomUse==='bed'),'used bed');
+  await p.$eval('[data-k=leaveRoom]',e=>e.click());await p.waitForTimeout(800);
+  // drama: force a quarrel and sickness, check journal
+  await p.evaluate(()=>{const [a,b]=[...Isle3DLife.agents.values()];if(b){Isle3DLife.quarrel(a,b)}Isle3DLife.catchSick(a,'cold')});await p.waitForTimeout(1500);await t.shot('drama');
+  const j=await p.evaluate(()=>Cfg.v.isle3d.journal.slice(0,3).map(x=>x.text));t.log('journal: '+j.join(' / '));t.assert(j.some(x=>/感冒/.test(x)),'sickness journaled');
+  await p.$eval('[data-k=wx]',e=>e.click());await p.waitForTimeout(600);await p.evaluate(()=>{document.querySelector('.sheet.open [data-w=rain]').click()});await p.waitForTimeout(1200);await p.evaluate(()=>Ov.back());await p.waitForTimeout(800);await t.shot('rain');
+  t.assert(await p.evaluate(()=>Isle3D.sky.wx==='rain'&&Isle3D.rain.visible),'weather override applied');
+  await p.evaluate(()=>{Isle3DLife.save();Cfg.flush()});await p.reload();await p.waitForFunction(()=>window.Isle3DLife?.agents?.size>0,null,{timeout:20000});
+  t.assert(await p.evaluate(id=>Cfg.v.active===id&&!!Cfg.v.isle3d.health,target),'state persisted')};

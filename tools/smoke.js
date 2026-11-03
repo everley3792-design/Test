@@ -7,7 +7,7 @@ const URL='file://'+path.join(__dirname,'..','web','index.html');
 const scenarios=require('./scenarios');
 (async()=>{
   const want=process.argv.slice(2);const names=want.length&&want[0]!=='all'?want:Object.keys(scenarios);
-  const b=await chromium.launch();let fail=0;
+  const b=await chromium.launch({args:['--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader']});let fail=0;
   for(const n of names){
     const ctx=await b.newContext({viewport:{width:390,height:844},deviceScaleFactor:2,hasTouch:true,isMobile:true});
     const p=await ctx.newPage();const errs=[];
