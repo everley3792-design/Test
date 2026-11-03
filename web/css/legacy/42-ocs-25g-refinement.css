@@ -1,0 +1,15 @@
+#qaToggle,#camFollow,#qbFab,#qbG,#nav{touch-action:none}
+#camFollow::after,#qaToggle::after{content:'';position:absolute;inset:-4px;border-radius:inherit}
+#layer>.sheet[inert]{pointer-events:none!important}
+#spC{display:inline-flex;gap:5px;align-items:center;font-size:13px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+#spG .c4-pc{min-width:0;overflow:hidden;gap:3px}
+#spG .sp-name{display:block;min-width:0;overflow-wrap:anywhere;line-height:1.45;max-width:100%}
+#spG .sp-price{display:flex;gap:3px;align-items:center;justify-content:center;font-variant-numeric:tabular-nums}
+#spG .ow{color:var(--ink-3);font-size:11px}#spG .ow.has-stock{color:var(--accent)}
+#spG{scrollbar-gutter:stable;overflow-anchor:none}
+.bg-search,.c4-in,.inp{min-width:0}
+#layer>.sheet .sh-title{overflow-wrap:anywhere}
+#hudRail .rail-ext{overscroll-behavior:contain}
+#spCh,#bgCh{scrollbar-width:none;scroll-padding-inline:2px}
+#spCh::-webkit-scrollbar,#bgCh::-webkit-scrollbar{display:none}
+#spQ:focus-visible,.bg-search:focus-visible{outline:2px solid var(--accent);outline-offset:1px}

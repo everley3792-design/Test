@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="zh-Hant" data-theme="light" data-motion="full">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#F4F2EC">
+<meta name="color-scheme" content="light dark">
+<title>OC Shimeji｜我的夥伴小世界</title>
+<script>
+/* 3.3: remember whether this is a brand-new player before anything writes a save */
+try{window.OCS_FIRST_RUN=!localStorage.getItem('ocs.v1')&&!localStorage.getItem('ocs.eco.v1')}catch(e){window.OCS_FIRST_RUN=false}
+/* 提早套用主題與動態偏好，避免啟動閃爍 */
+(function(){try{var s=JSON.parse(localStorage.getItem('ocs.v1')||'{}');var t=s.theme||'system';
+var d=t==='dark'||(t==='system'&&matchMedia('(prefers-color-scheme: dark)').matches);
+var r=document.documentElement;r.dataset.theme=d?'dark':'light';
+var m=s.motion||'system';r.dataset.motion=(m==='reduce'||(m==='system'&&matchMedia('(prefers-reduced-motion: reduce)').matches))?'reduce':'full';
+document.querySelector('meta[name=theme-color]').content=d?'#202C38':'#F4F2EC'}catch(e){}})();
+</script>
+<link rel="stylesheet" href="css/legacy/01-block.css">
+
+<link rel="stylesheet" href="css/legacy/02-ocs-24d-css.css" id="ocs-24d-css">
+<link rel="stylesheet" href="css/legacy/03-ocs-24d-css2.css" id="ocs-24d-css2">
+<link rel="stylesheet" href="css/legacy/04-ocs-24e-css.css" id="ocs-24e-css">
+<link rel="stylesheet" href="css/legacy/05-atelier-polish.css" id="atelier-polish">
+<link rel="stylesheet" href="css/legacy/06-softcat-ref-match.css" id="softcat-ref-match">
+<link rel="stylesheet" href="css/legacy/07-softcat-face-options.css" id="softcat-face-options">
+<link rel="stylesheet" href="css/legacy/08-ocs-24j-motion-accessories.css" id="ocs-24j-motion-accessories">
+
+<link rel="stylesheet" href="css/legacy/09-ocs-25e-flicker-stability.css" id="ocs-25e-flicker-stability">
+</head>
+<body>
+<div id="app">
+  <main id="pages">
+    <!-- 首頁 -->
+    <section class="page on" id="p-home" aria-label="首頁">
+      <div class="stage home" id="homeStage"></div>
+      <div class="hud-top">
+        <button class="hud-av" id="homeChip" aria-label="切換夥伴"><span class="hav" id="homeAv"></span></button>
+        <div class="hud-cap" id="hudCap" aria-expanded="false">
+          <div class="cap-main"><span class="lvc"><svg viewBox="0 0 24 24"><path d="M12 20.5s-8-4.9-8-11A4.6 4.6 0 0 1 12 6.9a4.6 4.6 0 0 1 8 2.6c0 6.1-8 11-8 11z" fill="currentColor"/></svg><b id="lvTxt">Lv.1</b></span><div class="bar"><i id="barFill"></i></div>
+            <button class="res" data-r="coin" aria-label="星幣"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#F6C65B"/><circle cx="12" cy="12" r="6" fill="none" stroke="#E7A93C" stroke-width="1.6"/><path d="M12 8.8v6.4" stroke="#E7A93C" stroke-width="1.6" stroke-linecap="round"/></svg><b id="rCoin">0</b><span class="pl">+</span></button></div>
+          <div class="cap-ext"><div class="ext-in">
+            <small id="xpTxt"></small>
+            <button class="res" data-r="gem" aria-label="星鑽"><svg viewBox="0 0 24 24"><path d="M12 3l7 6-7 12L5 9z" fill="#B99CF0"/><path d="M5 9h14M9.5 9 12 3l2.5 6L12 21z" fill="none" stroke="#fff" opacity=".65" stroke-width="1.2" stroke-linejoin="round"/></svg><b id="rGem">0</b></button>
+            <button class="res" data-r="star" aria-label="連續登入"><svg viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8 6.6 19.7l1.1-6.1L3.2 9.4l6.1-.8z" fill="#8FCBEF" stroke="#fff" stroke-width="1" stroke-linejoin="round"/></svg><b id="rStar">0</b></button>
+          </div></div>
+        </div>
+      </div>
+      <div class="hud-rail" id="hudRail">
+        <button class="rail-btn" data-go="toggle" aria-label="更多功能" aria-expanded="false"><span data-ic="more"></span><i class="rdot" id="railDot"></i></button>
+        <div class="rail-ext">
+          <button class="rail-btn" data-go="quest" aria-label="每日任務" data-ic="quest"></button>
+          <button class="rail-btn" data-go="bag" aria-label="背包" data-ic="bag"></button>
+          <button class="rail-btn" data-go="camera" aria-label="相機" data-ic="camera"></button>
+          <button class="rail-btn" data-go="studio" aria-label="佈置" data-ic="palette"></button>
+        </div>
+      </div>
+      <div class="hud-qa" id="fab">
+        <div class="qa-more">
+          <button class="qa-pill" data-act="call"><span data-ic="locate"></span>呼喚</button>
+          <button class="qa-pill" data-act="sleep"><span data-ic="moon"></span><span id="fabSleepLbl">睡覺</span></button>
+          <button class="qa-pill" data-act="hop"><span data-ic="up"></span>跳躍</button>
+        </div>
+        <div class="qa-row">
+          <button class="qa-main" id="qaToggle" aria-label="陪伴一下（拖曳可移動）" aria-expanded="false" data-ic="hand"></button>
+        </div>
+      </div>
+      <button class="hud-quest" id="questCard"><span class="qc-ic" data-ic="scroll"></span><span class="qc-t"><b id="qcT">每日任務</b><small id="qcD"></small></span><span class="chev" data-ic="right"></span><i class="rdot" id="qcDot"></i></button>
+      <div class="qbag" id="qbag"></div>
+    </section>
+    <!-- 角色 -->
+    <section class="page after" id="p-chars" aria-label="角色">
+      <div class="scroll">
+        <header class="phead"><div><h1>角色</h1><p id="charSub"></p></div>
+          <div class="acts"><button class="icon-btn add" id="btnImport" aria-label="新增角色" data-ic="plus"></button></div></header>
+        <div id="charSeg"></div>
+        <div class="grid" id="charGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:14px"></div>
+      </div>
+    </section>
+    <!-- 工坊 -->
+    <section class="page after" id="p-studio" aria-label="工坊">
+      <div class="scroll">
+        <header class="phead"><div><h1>工坊</h1><p>調整角色的外觀與擺放</p></div><span class="saved" id="saved"><span data-ic="check"></span>已儲存</span></header>
+        <div class="swrow" id="stSwitch"></div>
+        <div class="card wb">
+          <div class="wb-stage"><div class="stage pv" id="stStage"></div><span class="wb-tag glass">預覽・可點擊、拖曳</span></div>
+          <div class="wb-ctrl" id="stCtrl"></div>
+        </div>
+        <div class="sec">創作模組</div>
+        <div class="group mods" id="stMods"></div>
+        <div class="sec">匯入小提醒</div>
+        <div class="card tip"><ul>
+          <li><b>透明背景 PNG／WebP</b> 效果最好，系統會自動裁掉多餘的透明邊，讓腳底貼齊地面。</li>
+          <li>素材會縮到最長邊 768px 保存，不會被拉伸或變形。</li>
+          <li>GIF 目前僅使用第一格；逐格動畫與 Sprite Sheet 可在角色編輯器的「素材」分頁匯入。</li>
+          <li>若角色面向左側，請在上方將「素材朝向」改為朝左，行走時方向才會正確。</li>
+        </ul></div>
+      </div>
+    </section>
+    <!-- 探索 -->
+    <section class="page after" id="p-explore" aria-label="探索">
+      <div class="scroll">
+        <header class="phead"><div><h1>探索</h1><p>即將展開的世界</p></div>
+          <div class="acts"><button class="icon-btn plain" id="exSettings" aria-label="設定" data-ic="sliders"></button></div></header>
+        <div class="hero" id="exHero"></div>
+        <div class="sec">夥伴生活</div>
+        <div class="grid" id="exCats" style="display:grid;grid-template-columns:1fr 1fr;gap:14px"></div>
+        <div class="sec">裝置功能</div>
+        <div class="group" id="exNative"></div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="nav" id="nav" aria-label="主要導覽"><span class="nav-ind" id="navInd"></span>
+    <button class="nav-btn on" data-tab="0" aria-label="首頁"><span data-ic="home"></span><i class="nd"></i></button>
+    <button class="nav-btn" data-tab="1" aria-label="角色"><span data-ic="users"></span><i class="nd"></i></button>
+    <button class="nav-btn" data-tab="2" aria-label="工坊"><span data-ic="palette"></span><i class="nd"></i></button>
+    <button class="nav-btn" data-tab="3" aria-label="探索"><span data-ic="compass"></span><i class="nd"></i></button>
+    <button class="nav-btn" data-nact="more" aria-label="更多"><span data-ic="more"></span></button>
+  </nav>
+
+  <div class="ovp" id="settings" aria-label="設定"></div>
+  <div id="layer"></div>
+  <div class="dghost" id="dghost"></div>
+  <div id="splash"><b>OC SHIMEJI</b></div>
+</div>
+<input type="file" id="fileIn" accept="image/*" multiple>
+
+<script src="js/legacy/10-block.js"></script>
+<script src="js/legacy/11-block.js"></script>
+<link rel="stylesheet" href="css/legacy/12-block.css">
+<script src="js/legacy/13-block.js"></script>
+<link rel="stylesheet" href="css/legacy/14-block.css">
+<script src="js/legacy/15-block.js"></script>
+<link rel="stylesheet" href="css/legacy/16-block.css">
+<link rel="stylesheet" href="css/legacy/17-block.css">
+<script src="js/legacy/18-block.js"></script>
+<link rel="stylesheet" href="css/legacy/19-block.css">
+<link rel="stylesheet" href="css/legacy/20-oc-visual-2-4fa.css" id="oc-visual-2_4fa">
+<script src="js/legacy/21-block.js"></script>
+
+<script src="js/legacy/22-block.js"></script>
+<script src="js/legacy/23-block.js"></script>
+<script src="js/legacy/24-block.js"></script>
+<script src="js/legacy/25-block.js"></script>
+<script src="js/legacy/26-block.js"></script>
+<link rel="stylesheet" href="css/legacy/27-block.css">
+<script src="js/legacy/28-block.js"></script>
+<link rel="stylesheet" href="css/legacy/29-block.css">
+<script src="js/legacy/30-block.js"></script>
+<script src="js/legacy/31-block.js"></script>
+
+<script src="js/legacy/32-block.js"></script>
+
+
+<link rel="stylesheet" href="css/legacy/33-ocs-cozy-motion.css" id="ocs-cozy-motion">
+
+<link rel="stylesheet" href="css/legacy/34-ocs-community-style.css" id="ocs-community-style">
+<script src="js/legacy/35-ocs-community-system.js" id="ocs-community-system"></script>
+
+<link rel="stylesheet" href="css/legacy/36-stable-dialog-foundation.css" id="stable-dialog-foundation">
+<script src="js/legacy/37-block.js"></script>
+
+<link rel="stylesheet" href="css/legacy/38-ocs-25d-quality-pass.css" id="ocs-25d-quality-pass">
+
+<script src="js/legacy/39-ocs-25d-runtime-fixes.js" id="ocs-25d-runtime-fixes"></script>
+
+<link rel="stylesheet" href="css/legacy/40-ocs-25f-polish.css" id="ocs-25f-polish">
+
+<script src="js/legacy/41-ocs-25f-runtime.js" id="ocs-25f-runtime"></script>
+
+<link rel="stylesheet" href="css/legacy/42-ocs-25g-refinement.css" id="ocs-25g-refinement">
+<script src="js/legacy/43-ocs-25g-backup.js" id="ocs-25g-backup"></script>
+<link rel="stylesheet" href="css/legacy/44-ocs-25g-bag-layer.css" id="ocs-25g-bag-layer">
+<link rel="stylesheet" href="css/legacy/45-ocs-25h-usability.css" id="ocs-25h-usability">
+<script src="js/legacy/46-ocs-25h-ui-sync.js" id="ocs-25h-ui-sync"></script>
+
+<link rel="stylesheet" href="css/legacy/47-ocs-25i-comfort.css" id="ocs-25i-comfort">
+<script src="js/legacy/48-ocs-25i-drawer-state.js" id="ocs-25i-drawer-state"></script>
+
+<!-- ==========================================================
+     2.6 ISLAND ATELIER — 療癒島嶼重設計層
+     參考：動物森友會（島嶼手機、暖色紙感 UI、島民語音）
+           朋友收集（名牌對話框、逐字跳出的台詞）
+           王國之淚（空氣遠近感、光束、細金線）
+     純附加層：不改任何存檔鍵與既有系統，可整段移除還原。
+     ========================================================== -->
+<link rel="stylesheet" href="css/legacy/49-isle-26-tokens.css" id="isle-26-tokens">
+
+<link rel="stylesheet" href="css/legacy/50-isle-26-ui.css" id="isle-26-ui">
+
+<link rel="stylesheet" href="css/legacy/51-isle-26-world.css" id="isle-26-world">
+
+<script src="js/legacy/52-isle-26-js.js" id="isle-26-js"></script>
+
+<!-- ==========================================================
+     2.7 BIGGER ISLAND — 更大的島、更順的轉場、更聰明的島民
+     純附加層：沿用既有存檔鍵；可整段移除。
+     ========================================================== -->
+<link rel="stylesheet" href="css/legacy/53-isle-27-world.css" id="isle-27-world">
+
+<link rel="stylesheet" href="css/legacy/54-isle-27-motion.css" id="isle-27-motion">
+
+<script src="js/legacy/55-isle-27-js.js" id="isle-27-js"></script>
+
+<!-- 2.7.1 對話框修正：移到畫面最上層、不互相重疊、不被 HUD 擋住、不跑出螢幕、縮放時大小固定 -->
+<link rel="stylesheet" href="css/legacy/56-isle-271-talk.css" id="isle-271-talk">
+<script src="js/legacy/57-isle-271-talk-js.js" id="isle-271-talk-js"></script>
+<link rel="stylesheet" href="css/legacy/58-isle-28-shop.css" id="isle-28-shop">
+<script src="js/legacy/59-isle-28-shop-js.js" id="isle-28-shop-js"></script>
+<link rel="stylesheet" href="css/legacy/60-isle-29-life.css" id="isle-29-life">
+<script src="js/legacy/61-isle-29-life-js.js" id="isle-29-life-js"></script>
+<link rel="stylesheet" href="css/legacy/62-isle-30-goals.css" id="isle-30-goals">
+<script src="js/legacy/63-isle-30-goals-js.js" id="isle-30-goals-js"></script>
+<link rel="stylesheet" href="css/legacy/64-isle-31-ia.css" id="isle-31-ia">
+<script src="js/legacy/65-isle-31-ia-js.js" id="isle-31-ia-js"></script>
+<link rel="stylesheet" href="css/legacy/66-isle-32.css" id="isle-32">
+<script src="js/legacy/67-isle-32-js.js" id="isle-32-js"></script>
+<!-- ===== 3.3+ modules (new architecture; legacy layers above stay untouched) ===== -->
+<link rel="stylesheet" href="css/modules/native.css">
+<link rel="stylesheet" href="css/modules/perf.css">
+<script src="js/modules/perf.js"></script>
+<script src="js/modules/native-bridge.js"></script>
+<link rel="stylesheet" href="css/modules/onboarding.css">
+<script src="js/modules/onboarding.js"></script>
+<link rel="stylesheet" href="css/modules/world.css">
+<script src="js/modules/world.js"></script>
+<!-- ===== 3.4 Isle3D (WebGL home island) ===== -->
+<script src="vendor/three-r158.min.js"></script>
+<link rel="stylesheet" href="css/isle/isle.css">
+<script src="js/isle/engine.js"></script>
+<script src="js/isle/props.js"></script>
+<script src="js/isle/cat.js"></script>
+<script src="js/isle/house.js"></script>
+<script src="js/isle/life.js"></script>
+<script src="js/isle/ui.js"></script>
+<script src="js/isle/preview.js"></script>
+<script src="js/isle/main.js"></script>
+</body>
+</html>

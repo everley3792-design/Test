@@ -1,0 +1,159 @@
+/* ---------- 基礎字感：圓潤、溫暖、厚實 ---------- */
+html,body{font-weight:560;letter-spacing:.01em}
+svg.i{stroke-width:2.05}
+.phead h1{font-weight:850;letter-spacing:.04em;color:var(--ink)}
+.page-mark{color:var(--accent)!important}
+
+/* ---------- 按鈕：動森式厚底、按下會沉下去 ---------- */
+.btn{border-radius:18px;font-weight:750;background:var(--surface-2);color:var(--ink);box-shadow:0 3px 0 rgba(150,115,70,.18)!important;transition:transform .12s ease,box-shadow .12s ease,background .2s}
+.btn:active{transform:translateY(2px)!important;box-shadow:0 1px 0 rgba(150,115,70,.18)!important}
+.btn.primary{background:var(--accent);color:#fff;box-shadow:0 4px 0 color-mix(in srgb,var(--accent) 62%,#1d3b30)!important}
+html[data-theme=dark] .btn.primary{color:var(--on-accent)}
+.btn.primary:active{box-shadow:0 1px 0 color-mix(in srgb,var(--accent) 62%,#1d3b30)!important}
+.btn.danger{color:var(--danger)}
+.btn[disabled],.btn:disabled{opacity:.5;filter:saturate(.6)}
+.chip{font-weight:700;color:var(--ink-2);background:var(--surface-2)!important;box-shadow:inset 0 0 0 1.5px var(--line)!important}
+.chip.on,.bg-chips .chip.on,.ed-ch .chip.on,.who .chip.on,#dtB .who .chip.on{background:var(--sun)!important;color:var(--sun-ink)!important;box-shadow:0 3px 0 var(--sun-deep)!important}
+.seg{background:var(--surface-2)!important;box-shadow:inset 0 0 0 1.5px var(--line)!important}
+.seg-thumb{background:var(--sun)!important;box-shadow:0 3px 0 var(--sun-deep)!important}
+.seg button.on{color:var(--sun-ink)!important}
+.sw[aria-checked=true],.nx-sw.on{background:var(--accent)}
+.inp,.c4-in,.ed-i,.bg-search,.an-in{background:var(--surface)!important;color:var(--ink);box-shadow:inset 0 0 0 2px var(--line),inset 0 2px 0 rgba(150,115,70,.06)!important;border-radius:16px}
+.inp:focus,.c4-in:focus,.bg-search:focus{box-shadow:inset 0 0 0 2px var(--accent)!important}
+.tag{border-radius:10px;font-weight:800}
+.r-ic{background:color-mix(in srgb,var(--accent) 16%,var(--surface))!important;color:var(--accent)!important;border-radius:14px}
+
+/* ---------- 卡片：奶油紙卡 ---------- */
+.card,.group,.cat,.cc,.hero,.ed-card,.c4-card,.an-card,.an-entry{background:var(--surface)!important;border-radius:24px;box-shadow:0 0 0 1.5px var(--card-edge),var(--card-shadow)!important}
+.cc-art{background:radial-gradient(circle at 50% 85%,color-mix(in srgb,var(--leaf) 26%,transparent) 0 32%,transparent 33%),linear-gradient(170deg,color-mix(in srgb,var(--tb) 20%,var(--surface)),var(--surface-2))!important}
+.cc-info b{color:var(--ink)}
+.row+.row::before{background:var(--line)}
+
+/* ---------- 底部面板：島民手冊的紙張感 ---------- */
+#layer>.sheet{background:radial-gradient(var(--dots) 1.1px,transparent 1.5px) 0 0/18px 18px,var(--surface)!important;border-radius:30px 30px 0 0!important;border:2.5px solid color-mix(in srgb,var(--surface) 60%,#fff);border-bottom:0}
+html[data-theme=dark] #layer>.sheet{border-color:var(--line)}
+#layer>.sheet::before{content:"";position:absolute;left:50%;top:9px;translate:-50% 0;width:46px;height:5px;border-radius:9px;background:color-mix(in srgb,var(--ink) 18%,transparent);pointer-events:none}
+#layer>.sheet .sh-grab i{opacity:0}
+#layer>.sheet .sh-title,#layer>.sheet .sh-body>h3{font-weight:850;color:var(--ink);letter-spacing:.02em;display:flex;align-items:center;gap:9px}
+#layer>.sheet .sh-title::before{content:"";flex:none;width:20px;height:20px;border-radius:2px 14px 2px 14px;background:linear-gradient(135deg,var(--leaf),var(--accent));box-shadow:inset -3px -3px 0 rgba(0,0,0,.08);rotate:-8deg}
+#layer>.sheet .sheet-close{background:var(--surface-2);color:var(--ink-2);box-shadow:0 2px 0 rgba(150,115,70,.15)}
+#layer>.scrim{background:rgba(70,48,25,.22)!important}
+html[data-theme=dark] #layer>.scrim{background:rgba(0,8,14,.4)!important}
+
+/* 列表格：物品格子 */
+.qrow{background:var(--surface)!important;border-radius:22px!important;box-shadow:0 0 0 1.5px var(--line),0 3px 0 rgba(150,115,70,.1)}
+.qrow .qi{background:color-mix(in srgb,var(--sun) 35%,var(--surface))!important;color:var(--sun-ink)!important;border-radius:16px}
+.qrow.done{opacity:.62}
+.bar.q{background:var(--track)!important;height:8px}
+.bar.q i{background:linear-gradient(90deg,var(--leaf),var(--accent))!important}
+.bg-card,.c4-pc,.tz-c,.furn-choice{background:var(--surface)!important;border:0!important;border-radius:22px!important;box-shadow:0 0 0 1.5px var(--line),0 3px 0 rgba(150,115,70,.12)!important}
+.bg-card .it,.c4-pc .im{background:radial-gradient(ellipse 60% 40% at 50% 82%,rgba(120,90,50,.13),transparent 70%),color-mix(in srgb,var(--sun) 10%,var(--surface-2))!important;border-radius:18px}
+.c4-pc .im{margin:0 6px}
+.c4-pc:active,.bg-card:active{transform:translateY(2px) scale(.98)!important}
+.it .q{background:var(--accent);color:#fff;box-shadow:0 0 0 2px var(--surface)}
+/* 商店：條紋遮陽篷 */
+#layer>.sheet:has(#spB)::after{content:"";position:absolute;left:0;right:0;top:0;height:14px;background:repeating-linear-gradient(90deg,#F07C7C 0 26px,#FFF6E6 26px 52px);-webkit-mask:radial-gradient(9px 9px at 13px 100%,transparent 98%,#000) 0 0/26px 100% repeat-x;mask:radial-gradient(9px 9px at 13px 100%,transparent 98%,#000) 0 0/26px 100% repeat-x;opacity:.9;pointer-events:none}
+#layer>.sheet:has(#spB)::before{top:20px}
+#layer>.sheet:has(#spB) .sh-title::before{background:linear-gradient(135deg,#F59E7A,#F07C7C)}
+
+/* ---------- HUD：頂部資訊膠囊 ---------- */
+.hud-av{box-shadow:0 0 0 3px #fff,0 0 0 5.5px var(--sun),var(--hud-sh)!important;background:linear-gradient(160deg,#E7F6EA,#CFEAD9)!important}
+html[data-theme=dark] .hud-av{box-shadow:0 0 0 3px var(--surface),0 0 0 5.5px var(--sun),var(--hud-sh)!important;background:#304150!important}
+.resident-picker-trigger::before{background:var(--accent)!important;border-color:#fff!important}
+.hud-cap{background:var(--hud)!important;border:2px solid color-mix(in srgb,var(--surface) 40%,#fff);box-shadow:var(--hud-sh)!important;color:var(--ink)}
+html[data-theme=dark] .hud-cap{border-color:var(--line)}
+.lvc{color:#E9738A!important}
+.cap-main .bar{background:#F7DDE2!important}
+.res{background:#FFF1C4!important;color:var(--sun-ink)!important;border-radius:12px!important;font-weight:800}
+html[data-theme=dark] .res{background:rgba(242,207,94,.18)!important;color:var(--sun)!important}
+/* 島民手機（右上） */
+#hudRail>.rail-btn[data-go=toggle]{width:42px;height:46px;border-radius:15px;background:linear-gradient(170deg,color-mix(in srgb,var(--accent) 85%,#fff),var(--accent))!important;box-shadow:0 3px 0 color-mix(in srgb,var(--accent) 60%,#1d3b30),0 10px 18px -10px rgba(30,70,55,.6)!important;color:#fff}
+#hudRail>.rail-btn[data-go=toggle] svg{color:#fff!important;width:20px;height:20px}
+#hudRail>.rail-btn[data-go=toggle]::before{content:"";position:absolute;top:5px;left:50%;translate:-50% 0;width:12px;height:2.5px;border-radius:3px;background:rgba(255,255,255,.55)}
+#hudRail.open>.rail-btn[data-go=toggle]{background:var(--sun)!important;box-shadow:0 3px 0 var(--sun-deep)!important}
+#hudRail.open>.rail-btn[data-go=toggle] svg{color:var(--sun-ink)!important}
+#hudRail .rail-ext,#hudRail.open .rail-ext{background:radial-gradient(var(--dots) 1.1px,transparent 1.5px) 0 0/16px 16px,var(--surface)!important;border:5px solid var(--accent);border-radius:34px!important;box-shadow:0 4px 0 color-mix(in srgb,var(--accent) 55%,#1d3b30),0 24px 40px -22px rgba(30,60,40,.7)!important;padding:14px 12px 16px!important;row-gap:12px!important}
+#hudRail .hub-heading{text-align:center;font-size:12px!important;letter-spacing:.24em!important;color:var(--ink-2)!important;font-weight:800;padding:0 0 6px!important}
+#hudRail .rail-ext .rail-btn{background:none!important;height:auto!important;min-height:84px;gap:6px!important;color:var(--ink)!important;font-size:11.5px!important;font-weight:750!important}
+#hudRail .rail-ext .rail-btn>svg,#hudRail .rail-ext .rail-btn>img,#hudRail .rail-ext .rail-btn>.mini-art{width:54px!important;height:54px!important;padding:14px;border-radius:19px;background:var(--app,#8FC98A);color:#fff!important;stroke-width:2.3;box-shadow:0 3px 0 color-mix(in srgb,var(--app,#8FC98A) 62%,#2b2b2b),inset 0 -6px 0 rgba(0,0,0,.06);transition:transform .14s ease}
+#hudRail .rail-ext .rail-btn>img,#hudRail .rail-ext .rail-btn>.mini-art{padding:7px;filter:drop-shadow(0 0 0 transparent)}
+#hudRail .rail-ext .rail-btn:active>*:first-child{transform:translateY(2px) scale(.96)}
+#railEnv{--app:#62B8E6}
+#hudRail [data-go=quest]{--app:#F4A65B}
+#hudRail [data-hub=shop]{--app:#EF7F7F}
+#hudRail [data-go=bag]{--app:#C99863}
+#hudRail [data-go=camera]{--app:#9C8CE2}
+#hudRail [data-go=studio]{--app:#EC8DB6}
+#hudRail [data-go=dress]{--app:#4DBA9C}
+#hudRail [data-go=room]{--app:#93C65B}
+#evHistory{--app:#E7B53F}
+/* 左下：陪伴鍵 */
+#fab .qa-main{width:52px!important;height:52px!important;background:var(--hud)!important;border:3px solid var(--sun);box-shadow:var(--hud-sh)!important;color:#E9738A!important}
+#fab.open #qaToggle{background:var(--sun)!important;color:var(--sun-ink)!important}
+#fab .qa-pill{background:var(--hud)!important;color:var(--ink)!important;border-radius:16px!important;box-shadow:var(--hud-sh)!important;font-weight:750}
+#fab .qa-pill svg{color:var(--accent)!important}
+/* 右下：任務提醒 */
+.hud-quest{background:var(--hud)!important;box-shadow:var(--hud-sh)!important;border:2px solid color-mix(in srgb,var(--surface) 40%,#fff)}
+html[data-theme=dark] .hud-quest{border-color:var(--line)}
+.qc-ic{background:var(--accent)!important;color:#fff!important;border-radius:50%!important}
+.qc-t small{color:var(--ink)!important;font-weight:750!important}
+.hud-quest.ready{background:var(--sun)!important;animation:isleNudge 2.4s ease-in-out infinite}
+.hud-quest.ready .qc-t small{color:var(--sun-ink)!important}
+@keyframes isleNudge{0%,86%,100%{rotate:0deg}90%{rotate:-3deg}95%{rotate:3deg}}
+#qbFab{background:var(--hud)!important;box-shadow:var(--hud-sh)!important;border:2.5px solid color-mix(in srgb,var(--surface) 40%,#fff)}
+#qbFab svg{color:#B98450!important}
+.qb-fab b{background:#EF7F7F!important;color:#fff!important}
+.qb-panel{background:var(--hud)!important;box-shadow:var(--hud-sh)!important}
+.cam-follow{background:var(--hud)!important;box-shadow:var(--hud-sh)!important}
+.cam-follow[aria-pressed=true]{color:var(--accent)!important}
+/* 底部導覽 */
+#nav{background:var(--hud)!important;border:2.5px solid color-mix(in srgb,var(--surface) 40%,#fff)!important;box-shadow:var(--hud-sh)!important;height:56px;border-radius:28px;max-width:360px}
+html[data-theme=dark] #nav{border-color:var(--line)!important}
+#nav .nav-ind,#navInd{top:5px!important;bottom:5px!important;border-radius:20px!important;background:var(--sun)!important;box-shadow:0 3px 0 var(--sun-deep)!important}
+#nav .nav-btn{color:var(--ink-3)!important}
+#nav .nav-btn.on,#nav .nav-btn.on svg{color:var(--sun-ink)!important}
+#nav .nd{display:none}
+#nav .nav-btn svg{stroke-width:2.2}
+/* 提示通知：島嶼廣播 */
+.toast{background:var(--surface)!important;color:var(--ink)!important;border:2.5px solid color-mix(in srgb,var(--surface) 40%,#fff);border-radius:20px!important;box-shadow:var(--hud-sh)!important;font-weight:750;padding:8px 15px 8px 8px!important;gap:9px!important}
+html[data-theme=dark] .toast{border-color:var(--line)}
+.toast svg{width:26px!important;height:26px!important;padding:5px;border-radius:50%;background:var(--accent);color:#fff!important;flex:none}
+
+/* ---------- 對話框：名牌 + 逐字跳出 ---------- */
+#homeStage .bubble{background:var(--surface)!important;color:var(--ink)!important;font-size:13px!important;font-weight:650!important;line-height:1.55!important;padding:10px 15px 9px!important;border-radius:20px!important;border:2.5px solid color-mix(in srgb,var(--surface) 30%,#fff);box-shadow:0 3px 0 rgba(150,115,70,.18),0 12px 22px -12px rgba(80,50,20,.45)!important;max-width:206px!important;overflow:visible}
+html[data-theme=dark] #homeStage .bubble{border-color:var(--line)}
+#homeStage .bubble[data-name]{padding-top:14px!important;margin-bottom:6px}
+#homeStage .bubble[data-name]::before{content:attr(data-name);position:absolute;left:12px;top:-13px;padding:3px 11px;border-radius:11px;background:var(--namec,#F4A65B);color:#fff;font-size:11px;font-weight:850;letter-spacing:.05em;white-space:nowrap;rotate:-4deg;box-shadow:0 2px 0 rgba(0,0,0,.12)}
+#homeStage .bubble::after{border-right:2.5px solid color-mix(in srgb,var(--surface) 30%,#fff);border-bottom:2.5px solid color-mix(in srgb,var(--surface) 30%,#fff);background:var(--surface)!important}
+.bubble .tw{opacity:0;animation:isleTw .14s ease-out forwards;animation-delay:calc(var(--i) * 30ms)}
+@keyframes isleTw{to{opacity:1}}
+html[data-motion=reduce] .bubble .tw{animation:none;opacity:1}
+.community-name{background:var(--surface)!important;color:var(--ink)!important;border:2px solid #fff!important;font-weight:750!important}
+
+/* ---------- 島嶼時鐘（左上） ---------- */
+#isleClock{position:absolute;left:10px;top:calc(var(--sat) + 62px);z-index:9;display:flex;align-items:center;gap:8px;padding:5px 13px 5px 5px;border-radius:20px;background:var(--hud);color:var(--ink);box-shadow:var(--hud-sh);border:2px solid color-mix(in srgb,var(--surface) 40%,#fff);min-height:44px;transition:opacity .6s ease,transform .15s ease}
+html[data-theme=dark] #isleClock{border-color:var(--line)}
+#isleClock:active{transform:translateY(2px)}
+#isleClock .ic-wx{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#E3F3FB;color:#E9A126}
+#isleClock[data-wx=rain] .ic-wx,#isleClock[data-wx=storm] .ic-wx{background:#DDE6F2;color:#5F86BD}
+#isleClock[data-wx=snow] .ic-wx{background:#EEF3FA;color:#7AA4CF}
+#isleClock[data-wx=cloudy] .ic-wx,#isleClock[data-wx=fog] .ic-wx{background:#ECEDEF;color:#8E9AAB}
+#isleClock[data-night="1"] .ic-wx{background:#2E3B67;color:#F6E7A8}
+#isleClock .ic-wx svg{width:20px;height:20px}
+#isleClock b{display:block;font-size:17px;font-weight:850;line-height:1.05;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+#isleClock small{display:block;font-size:10.5px;font-weight:700;color:var(--ink-2);line-height:1.3}
+#p-home.idle #isleClock{opacity:.7}
+body.oc-edit #isleClock{opacity:0;pointer-events:none}
+.ev-hud{top:calc(var(--sat) + 116px)!important}
+
+/* ---------- 開場 ---------- */
+#splash{background:radial-gradient(ellipse at 50% 120%,#BFE8D6 0 30%,transparent 31%),linear-gradient(180deg,#BFE3F2,#F7EFD8 70%)!important;display:flex!important;flex-direction:column;gap:14px}
+html[data-theme=dark] #splash{background:radial-gradient(ellipse at 50% 120%,#2C4B48 0 30%,transparent 31%),linear-gradient(180deg,#1E2B48,#1A2530 70%)!important}
+#splash .sp-isle{width:132px;height:110px;animation:isleFloat 2.6s ease-in-out infinite}
+#splash .sp-t{font-size:22px;font-weight:900;letter-spacing:.22em;color:#3E8E78}
+html[data-theme=dark] #splash .sp-t{color:#8FE0C4}
+#splash .sp-s{font-size:12px;font-weight:700;letter-spacing:.3em;color:#9A8269}
+#splash .sp-dots{display:flex;gap:7px}#splash .sp-dots i{width:8px;height:8px;border-radius:2px 8px 2px 8px;background:#7CC56A;animation:isleDot 1.2s ease-in-out infinite}
+#splash .sp-dots i:nth-child(2){animation-delay:.15s;background:#F4A65B}#splash .sp-dots i:nth-child(3){animation-delay:.3s;background:#EF7F7F}
+@keyframes isleFloat{50%{transform:translateY(-6px)}}
+@keyframes isleDot{50%{transform:translateY(-6px) rotate(20deg)}}

@@ -1,0 +1,29 @@
+/* Desktop pet (Android overlay) — transparent single-actor stage. */
+html,body.pet-body{margin:0;width:100%;height:100%;background:transparent!important;overflow:hidden;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.pet-stage{position:fixed!important;inset:0;background:transparent!important;--feet:0px;--asz:90vmin;overflow:visible!important}
+.pet-stage>.actor{left:50%!important;bottom:0!important;width:var(--asz);height:var(--asz);margin-left:calc(var(--asz) / -2);transform:none!important;transition:rotate .35s cubic-bezier(.22,1,.36,1),translate .35s cubic-bezier(.22,1,.36,1)}
+.pet-stage .actor .art{width:100%;height:100%}
+.pet-stage .actor .a-flip{transition:transform .18s cubic-bezier(.22,1,.36,1)}
+/* Climbing a screen edge: body turns to the wall, legs keep the walk cycle. */
+.pet-stage .actor.climb-l{rotate:90deg;translate:-12% 0}
+.pet-stage .actor.climb-r{rotate:-90deg;translate:12% 0}
+.pet-stage .actor.hang .a-pose{animation:petHang 1.6s ease-in-out infinite}
+.pet-stage .actor[data-pose=sit] .a-squash{transform:scale(1.04,.9);transform-origin:50% 100%;transition:transform .3s}
+.pet-stage .actor[data-pose=land] .a-squash{animation:petLand .45s cubic-bezier(.22,1.2,.36,1)}
+.pet-stage .actor[data-pose=fall] .a-tilt{animation:petFall .5s ease-in-out infinite alternate}
+.pet-stage .actor[data-pose=jump] .a-squash{transform:scale(.92,1.1);transform-origin:50% 100%}
+.pet-stage .actor[data-pose=look] .a-tilt{animation:petLook 2.4s ease-in-out}
+.pet-stage .actor[data-pose=held] .a-pose{animation:petHeld .9s ease-in-out infinite;transform-origin:50% 8%}
+.pet-stage .actor.dizzy .a-tilt{animation:petDizzy .5s ease-in-out 3}
+.pet-stage .actor .zzz{opacity:0}
+.pet-stage .actor[data-state=sleep] .zzz{opacity:1}
+.pet-fx{position:absolute;inset:0;pointer-events:none;overflow:visible}
+.pet-fx i{position:absolute;left:50%;bottom:62%;font-style:normal;font-size:16px;line-height:1;animation:petHeart 1.2s cubic-bezier(.22,1,.36,1) forwards}
+@keyframes petHeart{0%{opacity:0;transform:translate(-50%,6px) scale(.5)}20%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + var(--dx,0px)),-46px) scale(1.1)}}
+@keyframes petLand{0%{transform:scale(1.18,.78)}55%{transform:scale(.94,1.06)}100%{transform:scale(1,1)}}
+@keyframes petFall{from{transform:rotate(-6deg)}to{transform:rotate(6deg)}}
+@keyframes petLook{0%,100%{transform:rotate(0)}30%{transform:rotate(-7deg)}70%{transform:rotate(6deg)}}
+@keyframes petHeld{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+@keyframes petHang{0%,100%{transform:translateY(0)}50%{transform:translateY(-3%)}}
+@keyframes petDizzy{0%,100%{transform:rotate(0)}25%{transform:rotate(-10deg)}75%{transform:rotate(10deg)}}
+html[data-motion=reduce] .pet-stage .actor *{animation-duration:0s!important;animation-iteration-count:1!important}

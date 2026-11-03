@@ -1,0 +1,64 @@
+/* One motion definition for all bottom sheets. Background windows keep their pose. */
+#layer>.sheet,#layer>.sheet.community-sheet,#layer>.sheet.resident-picker-sheet{
+ --sheet-distance:20px;transform:translate3d(0,var(--sheet-distance),0);opacity:0;
+ transition:transform .24s cubic-bezier(.2,.7,.3,1),opacity .2s ease;will-change:transform,opacity;
+ border-radius:26px 26px 0 0;box-shadow:0 -10px 34px rgba(13,29,34,.13);backface-visibility:hidden;
+}
+#layer>.sheet.open,#layer>.sheet.community-sheet.open,#layer>.sheet.resident-picker-sheet.open{transform:translate3d(0,0,0);opacity:1}
+#layer>.sheet[data-closing]{transform:translate3d(0,var(--sheet-exit-y,calc(var(--sheet-distance)*.6)),0);opacity:0;transition:transform .18s ease-in,opacity .16s ease-in;pointer-events:none}
+#layer>.sheet.under{opacity:0!important;transform:translate3d(0,0,0);transition:opacity .18s ease!important;pointer-events:none!important}
+#layer>.sheet.sheet-dragging{will-change:transform}
+#layer>.scrim{background:rgba(17,34,39,.19);transition:opacity .18s ease;backdrop-filter:none;-webkit-backdrop-filter:none}
+#layer>.scrim.scrim-nested{background:rgba(17,34,39,.07)}
+html[data-theme=dark] #layer>.sheet{box-shadow:0 -10px 34px rgba(0,7,14,.3)}
+html[data-theme=dark] #layer>.scrim{background:rgba(1,8,15,.32)}
+html[data-theme=dark] #layer>.scrim.scrim-nested{background:rgba(1,8,15,.12)}
+/* The drawer has constant geometry; no resizing, scaling or scrollbar flash. */
+#hudRail .rail-ext,#hudRail.open .rail-ext{
+ max-height:min(72dvh,500px)!important;padding:12px!important;margin:0!important;
+ transform:none!important;overflow-x:hidden;overflow-y:auto;scrollbar-width:none;scrollbar-gutter:auto;
+ -ms-overflow-style:none;backdrop-filter:none;-webkit-backdrop-filter:none;
+ transition:opacity .16s ease,visibility 0s .16s;
+}
+#hudRail:not(.open) .rail-ext{opacity:0;visibility:hidden;pointer-events:none}
+#hudRail.open .rail-ext{opacity:1;visibility:visible;pointer-events:auto;transition:opacity .16s ease,visibility 0s}
+#hudRail .rail-ext::-webkit-scrollbar{display:none;width:0;height:0}
+#hudRail .rail-ext,#hudRail.open .rail-ext{background:var(--surface)}
+#hudRail .rail-ext button{flex-shrink:0}
+@media(orientation:landscape) and (max-height:520px){
+ #hudRail .rail-ext,#hudRail.open .rail-ext{max-height:calc(100dvh - var(--sat) - var(--sab) - 122px)!important}
+}
+/* Item metadata stays in place while controls and counts update individually. */
+.item-detail-body [hidden]{display:none!important}
+#dtB{padding-top:4px;padding-bottom:20px;overflow-anchor:none}
+#dtB .dt-hero{align-items:center;gap:14px;margin-bottom:12px}
+#dtB .dt-hero>div:last-child{min-width:0;flex:1}
+#dtB [data-detail-name]{font-size:18px;line-height:1.4;overflow-wrap:anywhere}
+#dtB [data-detail-meta]{display:block;font-size:11px;line-height:1.65;color:var(--ink-2);margin-top:4px}
+#dtB .dt-tags{display:flex;flex-wrap:wrap;gap:5px;min-height:23px}
+#dtB .dt-tags .tg{margin:0;font-size:11px;line-height:1.6;animation:none;transition:none}
+#dtB .who{display:flex;gap:7px;overflow-x:auto;padding:4px 2px 6px;scrollbar-width:none;scroll-padding-inline:2px;overscroll-behavior-x:contain;min-height:46px}
+#dtB .who::-webkit-scrollbar{display:none}
+#dtB .who .chip{position:relative;min-height:36px;max-width:160px;flex:none;overflow:visible;height:36px;padding-inline:13px;font-size:12px;white-space:nowrap;transition:background-color .14s ease,color .14s ease;transform:none}
+#dtB .who .chip::after{content:'';position:absolute;inset:-4px 0}
+#dtB .who .chip.on{background:var(--accent);color:var(--on-accent)}
+#dtB .detail-actions{align-items:stretch;flex-wrap:wrap;gap:8px;margin-top:10px}
+#dtB .detail-use-actions{display:flex;flex-wrap:wrap;gap:8px;flex:1}
+#dtB .detail-use-actions .btn{min-height:44px;flex:1;white-space:nowrap;justify-content:center}
+#dtB .detail-favorite{min-height:44px;min-width:96px;justify-content:center;gap:6px}
+#dtB [data-favorite-icon]{display:grid;place-items:center;width:16px;height:18px}
+#dtB .detail-favorite.is-favorite{color:var(--accent)}
+#dtB .dt-stock{margin:18px 0 8px;font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums;line-height:1.5}
+#dtB .dt-stock b{color:var(--ink);font-weight:650}
+#dtB .detail-discard{gap:8px;margin:0}
+#dtB .detail-discard .btn{flex:1;min-height:42px;justify-content:center}
+#dtB .detail-footnote{font-size:11px;line-height:1.7;color:var(--ink-3);margin:10px 0 0}
+#dtB .detail-no-residents{margin-top:3px;font-size:12px}
+/* Gentle feedback without a second bounce in the selected navigation icon. */
+:is(.btn,.chip,.rail-btn,.qa-pill,.c4-b){transition-timing-function:cubic-bezier(.2,.7,.3,1)}
+:is(.btn,.chip,.rail-btn,.qa-pill,.c4-b):active{transform:scale(.98)}
+#nav .nav-btn.on svg{animation:none}
+#nav .nav-btn:active svg{transform:scale(.96)}
+#navInd{transition:left .22s cubic-bezier(.2,.7,.3,1),width .22s cubic-bezier(.2,.7,.3,1),opacity .16s ease}
+html[data-motion=reduce] #layer>.sheet{--sheet-distance:0px;transition:none!important}
+html[data-motion=reduce] #layer>.scrim,html[data-motion=reduce] #hudRail .rail-ext{transition:none!important}

@@ -1,0 +1,22 @@
+html.isle-talk-on #homeStage .actor .bubble{visibility:hidden!important;opacity:0!important;transition:none!important}
+#isleTalk{position:absolute;inset:0;z-index:6;pointer-events:none;overflow:hidden;contain:layout}
+.isle-tb{position:absolute;left:0;top:0;will-change:transform}
+.isle-tb .tb-in{position:relative;width:max-content;max-width:min(216px,calc(100vw - 28px));padding:10px 15px 9px;border-radius:20px;background:var(--surface,#FFFBF0);color:var(--ink,#5C4838);
+ font-size:13px;font-weight:650;line-height:1.55;letter-spacing:.01em;word-break:break-word;overflow-wrap:anywhere;
+ border:2.5px solid color-mix(in srgb,var(--surface,#FFFBF0) 30%,#fff);box-shadow:0 3px 0 rgba(150,115,70,.2),0 12px 22px -12px rgba(80,50,20,.5);
+ opacity:0;transform:scale(.55) translateY(8px);transform-origin:var(--tx,50%) 100%;transition:transform .42s cubic-bezier(.25,1.5,.45,1),opacity .18s ease}
+.isle-tb[data-flip] .tb-in{transform-origin:var(--tx,50%) 0}
+.isle-tb.on .tb-in{opacity:1;transform:none}
+.isle-tb.off .tb-in{transition:transform .18s ease-in,opacity .16s ease-in;transform:scale(.85) translateY(4px)}
+html[data-theme=dark] .isle-tb .tb-in{border-color:var(--line,rgba(247,235,211,.13));box-shadow:0 3px 0 rgba(0,0,0,.3),0 12px 22px -12px rgba(0,0,0,.6)}
+.isle-tb[data-name] .tb-in{padding-top:15px;margin-top:10px}
+.isle-tb[data-name] .tb-in::before{content:attr(data-name);position:absolute;left:12px;top:-13px;padding:3px 11px;border-radius:11px;background:var(--namec,#F4A65B);color:#fff;font-size:11px;font-weight:850;letter-spacing:.05em;white-space:nowrap;rotate:-4deg;box-shadow:0 2px 0 rgba(0,0,0,.12)}
+.isle-tb .tb-in::after{content:"";position:absolute;left:var(--tx,50%);bottom:-7px;width:12px;height:12px;translate:-50% 0;rotate:45deg;border-radius:3px;background:var(--surface,#FFFBF0);
+ border-right:2.5px solid color-mix(in srgb,var(--surface,#FFFBF0) 30%,#fff);border-bottom:2.5px solid color-mix(in srgb,var(--surface,#FFFBF0) 30%,#fff)}
+html[data-theme=dark] .isle-tb .tb-in::after{border-color:var(--line,rgba(247,235,211,.13))}
+.isle-tb[data-flip] .tb-in::after{bottom:auto;top:-7px;rotate:225deg}
+.isle-tb[data-flip][data-name] .tb-in::before{top:auto;bottom:-13px}
+.isle-tb .tw{opacity:0;animation:isleTw .14s ease-out forwards;animation-delay:calc(var(--i) * 30ms)}
+html[data-motion=reduce] .isle-tb .tb-in{transition:none}
+html[data-motion=reduce] .isle-tb .tw{animation:none;opacity:1}
+body.oc-edit #isleTalk{display:none}

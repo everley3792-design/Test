@@ -1,0 +1,57 @@
+/* 2.5B · World actors share a ground plane and contact-depth sorting. */
+.community-world{--floor-h:46%!important}
+#worldProps>.actor[data-resident],#worldProps>.a-shadow{transition:none!important}
+.community-fx{position:absolute;inset:0;pointer-events:none;z-index:200001}
+.actor[data-resident]{transform-origin:50% 100%;pointer-events:none}
+.actor[data-resident] .art{pointer-events:auto;touch-action:none}
+.community-name{position:absolute;left:50%;top:calc(100% + 4px);translate:-50% 0;max-width:min(130px,calc(var(--asz)*.95));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:600 11px var(--font);padding:4px 9px;min-height:26px;border-radius:99px;pointer-events:auto;color:var(--ink-2);background:var(--glass);border:1px solid var(--glass-line);opacity:.85}
+.community-focused .community-name{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 40%,transparent)}
+.actor[data-resident] .bubble{max-width:180px;font-size:12px;line-height:1.5}
+.actor[data-depth=back] .art{filter:brightness(.96)}
+.actor[data-depth=back][data-state=walk] .toy-svg :is(.eye-o,.eye-c,.eye-h,.eye-extra,.mouth-n,.mouth-h,.mouth-o,.mouth-extra,.eyebrows,.cheek){opacity:0!important}
+body.oc-edit .community-guest{visibility:hidden!important}
+#communityOpen{position:absolute;top:calc(var(--sat) + 58px);left:14px;z-index:28;display:flex;align-items:center;gap:6px;padding:0 10px;height:38px;border-radius:15px;color:var(--ink-2);font:600 11px var(--font);box-shadow:var(--sh-1)}
+#communityOpen svg{width:17px;height:17px;color:var(--accent)}#communityOpen b{font-size:11px;background:var(--accent-soft);color:var(--accent);border-radius:9px;min-width:20px;padding:2px 5px}
+body.oc-edit #communityOpen{display:none}
+#communityNotice{position:absolute;bottom:calc(var(--sab) + 98px);left:50%;translate:-50% 8px;z-index:29;max-width:calc(100% - 36px);padding:9px 15px;border-radius:99px;background:var(--glass);border:1px solid var(--glass-line);box-shadow:var(--sh-1);color:var(--ink);font-size:11px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;opacity:0;pointer-events:none;transition:opacity .25s,translate .38s var(--cozy-spring)}
+#communityNotice.show{opacity:1;translate:-50% 0}
+.community-panel{max-height:79dvh;padding-bottom:24px;scrollbar-width:none}.community-panel .page-mark{display:block;padding:5px 0 6px;font-size:11px;letter-spacing:.13em;color:var(--accent)}
+.community-hint{font-size:12px;line-height:1.8;color:var(--ink-2);margin:-5px 0 12px}.community-tabs{display:flex;gap:7px;margin-bottom:14px}.community-tabs .chip{flex:1}
+.community-toolbar{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--ink-2);margin:12px 0}.community-toolbar span{flex:1}.community-toolbar button{font:inherit;min-height:34px;padding:0 8px;border:1px solid var(--line);border-radius:11px;background:var(--surface-2);color:var(--ink-2)}
+.community-roster{display:flex;flex-direction:column;gap:9px}.community-card{display:flex;gap:8px;align-items:center;min-height:86px;padding:9px 8px;border-radius:20px;background:var(--surface-2);border:1px solid var(--line)}
+.community-avatar{width:61px;height:65px;flex:none;position:relative;display:grid;place-items:center}.community-avatar svg,.community-avatar img{max-width:100%;max-height:100%;width:100%;height:100%;object-fit:contain}.community-card>div{flex:1;min-width:0}.community-card b{display:block;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.community-card small{display:block;font-size:11px;color:var(--ink-2);line-height:1.7;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.community-join{min-width:43px;min-height:40px;padding:0 8px;border-radius:14px;font-size:11px;color:var(--ink-2);border:1px solid var(--line);background:var(--surface)}.community-join.on{color:var(--on-accent);background:var(--accent);border-color:transparent}.community-focus{width:34px;height:40px;display:grid;place-items:center;color:var(--ink-2);border-radius:12px}.community-focus svg{width:18px;height:18px}
+.community-auto{display:flex;align-items:center;gap:12px;margin:15px 0;padding:12px 0;border-top:1px solid var(--line);font-size:12px}.community-auto>span{flex:1}.community-auto small{display:block;font-size:11px;color:var(--ink-2);margin-top:4px}
+.community-relation{display:flex;gap:12px;align-items:center;width:100%;padding:14px;margin:0 0 9px;border:1px solid var(--line);background:var(--surface-2);border-radius:18px;color:var(--ink);text-align:left}.community-relation>span{color:var(--accent);flex:none}.community-relation svg{width:22px;height:22px}.community-relation>div{flex:1;min-width:0}.community-relation b{font-size:12px}.community-relation small{display:block;color:var(--ink-2);font-size:11px;margin:4px 0 9px}.community-relation i{display:block;height:4px;border-radius:3px;background:var(--line);overflow:hidden}.community-relation em{display:block;height:100%;background:var(--accent);border-radius:3px}
+.community-memory{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}.community-memory>span{display:grid;place-items:center;width:36px;height:36px;border-radius:13px;background:var(--accent-soft);color:var(--accent);flex:none}.community-memory svg{width:19px;height:19px}.community-memory b{display:block;font-size:12px;margin:5px 0}.community-memory small{font-size:11px;color:var(--ink-2);line-height:1.7}.community-memory p,.community-detail p{font-size:11px;line-height:1.8;color:var(--ink-2)}.community-detail{padding:14px;border-radius:17px;background:var(--surface-2)}
+.community-empty{text-align:center;padding:24px 12px;color:var(--ink-2);font-size:12px;line-height:1.8}.community-empty svg{width:30px;height:30px;margin-bottom:12px;color:var(--accent)}.community-empty b{display:block;color:var(--ink)}
+.community-ball{position:absolute;width:23px;height:23px;translate:-50% -50%;border-radius:50%;background:var(--surface);color:var(--accent);box-shadow:0 3px 7px #283d3030;pointer-events:none}.community-ball svg{width:100%;height:100%}
+.actor[data-social=wave] .toy-svg .ar{animation:communityWave .8s ease-in-out 3;transform-origin:160px 186px;transform-box:view-box}
+.actor[data-social=nod] .toy-svg .head-g{animation:communityNod .9s ease-in-out 2}
+@keyframes communityWave{0%,100%{rotate:0deg}40%{rotate:-30deg}70%{rotate:-12deg}}
+@keyframes communityNod{0%,100%{translate:0 0}45%{translate:0 3px}}
+.rm-it.community-water .rm-b{animation:communityPlant 1.7s ease-in-out}
+@keyframes communityPlant{0%,100%{rotate:0deg}25%{rotate:-3deg}65%{rotate:3deg}}
+html[data-motion=reduce] .actor[data-social] .toy-svg :is(.ar,.head-g){animation:none!important}
+@media(max-width:350px){.community-avatar{width:47px;height:55px}.community-card{gap:5px}.community-card b{font-size:11px}.community-focus{width:28px}.community-toolbar{gap:3px}.community-toolbar button{font-size:11px}}
+#residentControl{position:absolute;left:14px;right:14px;bottom:calc(var(--sab) + 89px);z-index:28;display:flex;align-items:center;gap:5px;padding:5px 7px;border-radius:17px;overflow-x:auto;scrollbar-width:none;max-width:460px;margin:auto}
+#residentControl>span{font-size:11px;color:var(--ink-2);white-space:nowrap;padding:0 4px}#residentControl button{flex:none;min-height:34px;max-width:130px;padding:0 12px;border-radius:12px;font-size:11px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#residentControl button.on{background:var(--accent);color:var(--on-accent)}body.oc-edit #residentControl{display:none}
+#communityNotice{bottom:calc(var(--sab) + 140px)}
+.cw-can,.cw-drop,.cw-splash{position:absolute;pointer-events:none;font-style:normal}.cw-can{width:55px;height:47px;transform-origin:20% 65%;color:#8fd0ee}.cw-can svg{width:100%;height:100%}.cw-drop{width:5px;height:10px;border-radius:60% 60% 65% 65%;background:#91ddff;border:1px solid #e4faff;box-shadow:0 0 4px #77d8ff77;opacity:0}.cw-splash{width:5px;height:7px;border-radius:50%;background:#b9ecff;opacity:0}.cw-react .toy-svg .head-g{animation:cwShake .32s ease-in-out 5}@keyframes cwShake{0%,100%{rotate:0deg}30%{rotate:-4deg}70%{rotate:4deg}}
+html[data-motion=reduce] .cw-react .toy-svg .head-g{animation:none}html[data-motion=reduce] .cw-drop{opacity:.8}html[data-motion=reduce] .cw-can{opacity:1}
+/* Compact HUD: selection and shared-life management live in the existing avatar. */
+#residentControl,#communityOpen{display:none!important}
+#communityNotice{bottom:calc(var(--sab) + 96px)}
+.resident-picker-trigger::before{content:'';position:absolute;right:-2px;bottom:0;width:10px;height:10px;border-radius:50%;background:var(--accent);border:2px solid var(--surface);z-index:5;pointer-events:none}
+.community-name{opacity:0;pointer-events:none;transition:opacity .18s}.community-focused .community-name{opacity:.8;pointer-events:auto}
+.sheet.community-sheet{height:min(78dvh,720px);min-height:0!important;max-height:calc(100dvh - var(--sat) - 16px);transform:translate3d(0,24px,0);transition:transform .3s var(--cozy-out),opacity .2s ease}
+.sheet.community-sheet.open{transform:none}
+.community-sheet .community-panel{flex:1;min-height:0;max-height:none;overflow-y:auto;overflow-anchor:none;scrollbar-gutter:stable}
+.community-sheet .community-avatar *,.resident-picker-sheet .community-avatar *{animation:none!important;transition:none!important}
+.community-sheet .community-card{min-height:86px;flex-shrink:0}
+.community-sheet .community-avatar img{display:block}
+.sheet.resident-picker-sheet{max-height:80dvh;transform:translate3d(0,24px,0);transition:transform .3s var(--cozy-out),opacity .2s ease}.sheet.resident-picker-sheet.open{transform:none}
+.resident-pick-list{display:flex;flex-direction:column;gap:7px;margin:12px 0}.resident-pick-list>button{display:flex;align-items:center;text-align:left;gap:12px;min-height:64px;padding:7px 12px;border-radius:17px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);font-size:13px}.resident-pick-list>button[aria-pressed=true]{border-color:var(--accent);background:var(--accent-soft)}.resident-pick-list .community-avatar{width:45px;height:48px}.resident-pick-list>button>span:nth-child(2){flex:1;overflow:hidden;text-overflow:ellipsis}.resident-pick-list i{font-style:normal;color:var(--accent)}.resident-pick-list svg.i{width:19px;height:19px}.resident-manage{display:flex;align-items:center;gap:8px;width:100%;min-height:52px;padding:10px 4px;color:var(--accent);font-size:12px;border-top:1px solid var(--line)}.resident-manage>span{flex:1;text-align:right;color:var(--ink-2);font-size:11px}.resident-manage svg{width:18px;height:18px;flex:none}
+.community-focus{min-height:44px}.community-join{min-height:44px}
+/* Collapsed rail containers must not form an invisible hit area over the HUD. */
+#hudRail{pointer-events:none}#hudRail>.rail-btn,#hudRail.open .rail-ext{pointer-events:auto}

@@ -1,0 +1,24 @@
+/* 3.3 performance budgets — driven by data-* on <html> (see js/modules/perf.js) */
+.perf-meter{position:fixed;left:calc(10px + env(safe-area-inset-left,0px));bottom:calc(var(--sab) + 92px);z-index:400000;pointer-events:none;
+  font:600 11px/1 ui-monospace,monospace;padding:5px 8px;border-radius:9px;background:rgba(30,40,45,.72);color:#fff}
+/* render quality */
+html[data-prender=medium] :is(.glass,.hud,.sheet,.nav,.toast,.isle-tb){-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html[data-prender=low] *{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html[data-prender=low] .stage svg{shape-rendering:optimizeSpeed}
+html[data-prender=low] .stage .actor .art{filter:none!important}
+/* shadows */
+html[data-pshadow=off] .stage :is(.a-shadow,.isle-cshade){filter:none!important;opacity:.45}
+html[data-pshadow=off] :is(.hud-av,.hud-cap,.rail-btn,.qa-main,.hud-quest,.nav){box-shadow:none!important}
+/* weather density */
+html[data-pwx=light] .wx>*:nth-child(2n){display:none!important}
+html[data-pwx=light] .wx{filter:none!important}
+/* particles */
+html[data-pfx=off] :is(.isle-petal,.isle-dust,.isle-leaf,.isle-glint,.isle-spark,.isle-bfly,.isle-lglow,.leaf,.cw-react){display:none!important}
+html[data-pfx=some] :is(.isle-petal,.isle-dust,.isle-glint):nth-of-type(2n){display:none!important}
+html[data-pfx=off] .stage .stars{animation:none!important}
+/* ambient scenery motion */
+html[data-pamb=off] .stage :is(.cloud,.scene-tree .sw,.isle-air,.isle-wripple,.isle-tuft,.isle-lily,.isle-fl,.orb,.stars),
+html[data-pamb=off] .stage :is(.cloud,.isle-air) *{animation-play-state:paused!important}
+/* character detail (breathing + blinking always kept) */
+html[data-pdetail=low] .actor :is(.tail-tip,.ear,.acc){animation-play-state:paused!important}
+.actor.p-lod :is(.tail,.tail-tip,.ear,.acc,.arm,.foot){animation-play-state:paused!important}

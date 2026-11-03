@@ -1,0 +1,12 @@
+/* The previous thunderstorm effect stroboscopically flashed the entire viewport. */
+.stage .flash,.stage .flash.go{opacity:0!important;animation:none!important;visibility:hidden!important}
+/* Blur across a continuously repainted, transformed scene triggers Android WebView
+   offscreen GPU surface reallocation. Keep the creamy opaque glass treatment. */
+#p-home .glass,#p-home .hud-cap,#p-home .hud-weather,#p-home .cam-follow,
+#p-home .qb-fab,#p-home .qb-panel,#p-home .community-name,#p-home .community-open,
+#p-home .qa-pill,#p-home .qa-main{
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+}
+/* Keep the home canvas and cover from joining an oversized filtered layer. */
+#homeStage .oc-cam-plane>.wfx{filter:none!important;mix-blend-mode:normal;}
+#homeStage .oc-cam-plane>.shade{pointer-events:none;}

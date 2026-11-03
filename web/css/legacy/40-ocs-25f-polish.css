@@ -1,0 +1,23 @@
+/* Screen-space backplate and atmosphere cannot uncover camera-space edges. */
+#homeStage{background:transparent!important;isolation:isolate;overflow:hidden}
+#homeStage>.screen-sky{position:absolute;inset:-2px;z-index:0;pointer-events:none;background:linear-gradient(180deg,var(--sky-a),var(--sky-b) 48%,var(--sky-c) 64%,var(--floor-a) 78%,var(--floor-b));transform:none!important}
+#homeStage>.screen-sky::after{display:none!important}
+#homeStage>.oc-cam-plane{z-index:1}
+#homeStage>:is(.screen-shade,.screen-fog,.screen-glow){position:absolute;inset:-2px;z-index:2;pointer-events:none;transform:none!important;contain:paint}
+#homeStage>.screen-shade{background:var(--shc,transparent)}
+#homeStage>.screen-fog{background:linear-gradient(var(--fogc,transparent),var(--fogc2,transparent));opacity:var(--fog,0)}
+#homeStage>.screen-fog::before,#homeStage>.screen-fog>i{display:none!important}
+#homeStage>.screen-glow{background:radial-gradient(ellipse at var(--gx,50%) 24%,var(--orb-glow),transparent 65%)}
+#homeStage .a-flip{transition:none!important}
+#pages>.page,#pages>.page.on{transform:none!important;transition:none!important}
+#layer>.sheet,#layer>.sheet.open,#layer>.sheet.community-sheet,#layer>.sheet.community-sheet.open,#layer>.sheet.resident-picker-sheet,#layer>.sheet.resident-picker-sheet.open,#layer>.sheet[data-closing]{transform:translate3d(0,0,0);transition:opacity .2s ease;will-change:opacity;backface-visibility:hidden}
+.ovp,.ovp.open{transform:translate3d(0,0,0);transition:opacity .24s ease,visibility 0s .24s}.ovp.open{transition:opacity .24s ease,visibility 0s}
+.c4-ov{animation:polishFade .24s ease}@keyframes polishFade{from{opacity:0}to{opacity:1}}
+.rm-it .rm-b{transition:none!important} /* palette already interpolates; do not chase a moving filter target */
+#layer .sheet-close{min-width:38px;min-height:38px;top:3px;right:10px}
+#layer .sheet-close::after{content:'';position:absolute;inset:-3px}
+#layer .sh-grab{touch-action:none;flex-shrink:0}
+#layer .sh-body{scrollbar-width:none}#layer .sh-body::-webkit-scrollbar{display:none}
+#homeStage .community-name{max-width:min(112px,var(--asz));font-size:11px;padding:3px 8px;min-height:23px}
+#p-home :is(.hud-top,.hud-rail,#qbag,#camFollow,#fab,#questCard){-webkit-backdrop-filter:none;backdrop-filter:none}
+html[data-motion=reduce] #layer>.sheet,html[data-motion=reduce] .ovp{transition:none!important}

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OC Shimeji</string>
+    <string name="overlay_channel">桌面夥伴</string>
+    <string name="overlay_channel_desc">桌面懸浮夥伴執行中時顯示的常駐通知</string>
+    <string name="overlay_running">%1$d 位夥伴正在桌面陪伴你</string>
+    <string name="overlay_paused">桌面夥伴已暫停</string>
+    <string name="overlay_hidden">桌面夥伴已隱藏</string>
+    <string name="act_pause">暫停</string>
+    <string name="act_resume">繼續</string>
+    <string name="act_hide">隱藏</string>
+    <string name="act_show">顯示</string>
+    <string name="act_stop">關閉</string>
+    <string name="need_permission">請允許「顯示在其他應用程式上層」，夥伴才能出現在桌面</string>
+</resources>

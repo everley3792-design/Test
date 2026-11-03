@@ -1,0 +1,73 @@
+/* ---------- 世界延伸：地面 3 倍寬、海岸線往前推 ---------- */
+#homeStage .oc-cam-plane>.floor{left:-100%!important;right:-100%!important}
+#homeStage .oc-cam-plane>.sky{left:-120%!important;right:-120%!important}
+#homeStage .oc-cam-plane>.shade,#homeStage .oc-cam-plane>.flash{left:-120%!important;right:-120%!important}
+#homeStage .oc-cam-plane>.fog::before{left:-120%!important;right:-120%!important}
+#homeStage .oc-cam-plane>.stars{left:-120%!important;right:-120%!important}
+#homeStage .oc-cam-plane>.ffly{left:-110%!important;right:-110%!important}
+#homeStage .oc-cam-plane>.wfx{left:-120%!important;width:340%!important}
+.isle-ground{inset:0 0 auto 0!important;height:160%!important;z-index:1}
+.isle-cshade{height:60%!important}
+.isle-fl.big{width:16px;height:16px}
+
+/* ---------- 世界物件：大樹、營火、長椅、岩石 ---------- */
+.isle-prop{position:absolute;translate:-50% -100%;pointer-events:none;transform-origin:50% 100%}
+.isle-prop>svg{display:block;width:100%;height:100%;overflow:visible}
+.isle-prop[data-tap]{pointer-events:auto;cursor:pointer}
+.isle-prop .scene-tree{pointer-events:auto}
+.isle-prop path[fill="var(--tree-a)"]{fill:color-mix(in oklab,#7FC26A 58%,var(--tree-a))}
+.isle-prop path[fill="var(--tree-b)"]{fill:color-mix(in oklab,#4E9E5C 58%,var(--tree-b))}
+.isle-prop path[fill="var(--wood)"]{fill:color-mix(in oklab,#B98157 55%,var(--wood))}
+#homeStage[data-phase=night] .isle-prop path[fill="var(--tree-a)"]{fill:color-mix(in oklab,#3E6E57 55%,var(--tree-a))}
+#homeStage[data-phase=night] .isle-prop path[fill="var(--tree-b)"]{fill:color-mix(in oklab,#2D5545 55%,var(--tree-b))}
+.isle-fire .fl,.isle-fire .glow,.isle-fire .ember{opacity:0;transition:opacity 1.2s}
+.isle-fire[data-lit] .fl,.isle-fire[data-lit] .ember{opacity:1}
+.isle-fire[data-lit] .glow{opacity:.9}
+.isle-fire[data-lit] .fl{transform-box:fill-box;transform-origin:50% 100%;animation:isleFlame .9s ease-in-out infinite alternate}
+.isle-fire[data-lit] .fl.b{animation-duration:.7s;animation-delay:-.3s}
+.isle-fire[data-lit] .fl.c{animation-duration:1.1s;animation-delay:-.6s}
+.isle-fire[data-lit] .glow{animation:isleGlow 1.6s ease-in-out infinite alternate}
+.isle-fire[data-lit] .ember{animation:isleEmber 1.8s ease-out infinite}
+.isle-fire[data-lit] .ember.b{animation-delay:-.6s}.isle-fire[data-lit] .ember.c{animation-delay:-1.2s}
+@keyframes isleFlame{0%{transform:scale(1,1) skewX(0deg)}50%{transform:scale(.92,1.08) skewX(-4deg)}100%{transform:scale(1.04,.94) skewX(3deg)}}
+@keyframes isleGlow{to{opacity:.6;transform:scale(1.06)}}
+@keyframes isleEmber{0%{transform:translate(0,0);opacity:0}20%{opacity:1}100%{transform:translate(4px,-26px);opacity:0}}
+.isle-prop .glow{transform-box:fill-box;transform-origin:50% 50%}
+
+/* ---------- 島民的小念頭泡泡 ---------- */
+.isle-think{position:absolute;z-index:300000;width:36px;height:31px;margin:-31px 0 0 -18px;border-radius:17px;background:var(--surface,#FFFBF0);box-shadow:0 2px 0 rgba(150,115,70,.22),0 6px 12px -8px rgba(90,58,28,.5);display:grid;place-items:center;pointer-events:none}
+.isle-think::before,.isle-think::after{content:"";position:absolute;border-radius:50%;background:var(--surface,#FFFBF0);box-shadow:0 1px 0 rgba(150,115,70,.2)}
+.isle-think::before{width:8px;height:8px;left:6px;bottom:-7px}
+.isle-think::after{width:5px;height:5px;left:2px;bottom:-12px}
+.isle-think svg{width:21px;height:21px;overflow:visible}
+
+/* ---------- 世界特效 ---------- */
+.isle-wfx{position:absolute;z-index:260000;pointer-events:none;translate:-50% -50%}
+.isle-note{width:16px;height:18px}
+.isle-note svg,.isle-spark svg,.isle-burst svg{width:100%;height:100%;display:block;overflow:visible}
+.isle-spark{width:14px;height:14px}
+.isle-burst{width:46px;height:46px}
+.isle-dust{width:10px;height:6px;border-radius:50%;background:color-mix(in oklab,#F4E7C8 70%,var(--isle-tint,#9b9));opacity:.8}
+.isle-petal{width:8px;height:6px;border-radius:0 80% 0 80%;background:var(--c,#F5A3B5)}
+.isle-wfish{width:24px;height:20px}
+.isle-wfish svg{width:100%;height:100%}
+.isle-wripple{width:28px;height:10px;border-radius:50%;border:2px solid rgba(255,255,255,.9)}
+.isle-shoot{position:absolute;width:90px;height:2px;border-radius:2px;background:linear-gradient(90deg,rgba(255,255,255,0),#FFF7D6);pointer-events:none;rotate:-24deg;transform-origin:100% 50%}
+.isle-flash{position:absolute;inset:0;z-index:30;background:#fff;pointer-events:none;opacity:0}
+.isle-bfly-w{width:18px;height:16px;z-index:270000}
+.isle-bfly-w svg{width:100%;height:100%;overflow:visible}
+.isle-bfly-w .wl{transform-origin:9px 8px;animation:isleFlap .2s ease-in-out infinite alternate}
+.isle-bfly-w .wr{transform-origin:9px 8px;animation:isleFlap .2s ease-in-out infinite alternate-reverse}
+
+/* ---------- 長按角色：互動轉盤 ---------- */
+#isleRing{position:fixed;left:0;top:0;width:0;height:0;z-index:90;pointer-events:none}
+#isleRing .ring-scrim{position:fixed;inset:0;pointer-events:auto;background:radial-gradient(circle at var(--cx) var(--cy),rgba(255,248,230,0) 0 70px,rgba(70,48,25,.16) 190px);opacity:0;transition:opacity .25s ease}
+html[data-theme=dark] #isleRing .ring-scrim{background:radial-gradient(circle at var(--cx) var(--cy),rgba(0,8,14,0) 0 70px,rgba(0,8,14,.35) 190px)}
+#isleRing.open .ring-scrim{opacity:1}
+#isleRing .ring-b{position:fixed;width:60px;height:60px;margin:-30px 0 0 -30px;border-radius:50%;border:3px solid #fff;background:var(--surface);color:var(--ink);box-shadow:0 3px 0 rgba(150,115,70,.24),0 12px 20px -12px rgba(90,58,28,.55);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;pointer-events:auto;font:800 10.5px/1.1 var(--font,inherit);letter-spacing:.04em;padding:0;-webkit-tap-highlight-color:transparent}
+html[data-theme=dark] #isleRing .ring-b{border-color:var(--surface-2)}
+#isleRing .ring-b>span{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--c);color:#fff}
+#isleRing .ring-b>span svg{width:17px;height:17px}
+#isleRing .ring-b:active{scale:.92}
+#isleRing .ring-name{position:fixed;translate:-50% -100%;padding:4px 13px;border-radius:12px;background:var(--sun);color:var(--sun-ink);font:850 12px var(--font,inherit);box-shadow:0 3px 0 var(--sun-deep);pointer-events:none;white-space:nowrap}
+#isleRing .ring-name small{font-weight:700;opacity:.75;margin-left:6px}

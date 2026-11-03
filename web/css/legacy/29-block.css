@@ -1,0 +1,2 @@
+.rm-it{transition:left .38s cubic-bezier(.2,.8,.3,1)}
+body.oc-edit .rm-it,body.room-edit .rm-it{transition:none!important}

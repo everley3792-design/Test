@@ -1,0 +1,23 @@
+/* 自訂導覽列 */
+#nav{touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;grid-template-columns:repeat(var(--n,6),1fr)!important}
+#nav.nx-few{max-width:min(330px,calc(var(--n)*64px + 16px))!important}
+#nav .nx-off{display:none!important}
+#navInd{transition:left .5s var(--spring),width .5s var(--spring),opacity .25s}
+#nav.nx-edit .nav-btn:not(.nx-drag){animation:nxWig .46s ease-in-out infinite alternate}
+@keyframes nxWig{from{rotate:-1.6deg}to{rotate:1.6deg}}
+.nav-btn.nx-drag,.nav-btn.nx-drag svg{color:var(--accent)!important}
+.nav-btn.nx-drag{z-index:6;scale:1.14;box-shadow:0 14px 26px -10px rgba(60,60,100,.45)!important;background:var(--surface,#fff)!important;transition:none!important}
+.nav-btn.nx-settle,.nx-row.nx-settle{transition:translate .28s var(--spring)}
+.nx-hint{font-size:12px;color:var(--ink-3);line-height:1.5;margin:4px 2px 12px}
+.nx-list{position:relative;display:flex;flex-direction:column;gap:8px}
+.nx-row{display:flex;align-items:center;gap:12px;height:56px;padding:0 12px;border-radius:18px;background:var(--surface-2)}
+.nx-row.off{opacity:.55}
+.nx-row.nx-drag{z-index:6;scale:1.03;box-shadow:0 12px 24px -10px rgba(60,60,100,.4);transition:none;background:var(--surface,#fff)}
+.nx-h{width:34px;height:40px;display:grid;place-items:center;color:var(--ink-3);font-size:20px;touch-action:none;cursor:grab}
+.nx-i{width:26px;height:26px;color:var(--accent);display:grid;place-items:center}.nx-i svg{width:24px;height:24px}
+.nx-row b{flex:1;font-size:14.5px;font-weight:700}
+.nx-sw{width:46px;height:28px;border-radius:99px;background:var(--ink-3);position:relative;transition:background .25s;flex:none}
+.nx-sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:transform .3s var(--spring);box-shadow:0 2px 5px rgba(0,0,0,.2)}
+.nx-sw.on{background:var(--accent)}.nx-sw.on::after{transform:translateX(18px)}
+.nx-sw:disabled{opacity:.45}
+.nx-act{display:flex;gap:8px;margin-top:14px}.nx-act .btn{flex:1;height:42px;font-size:13.5px}

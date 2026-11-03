@@ -1,0 +1,80 @@
+/* 2.5D quality pass: viewport continuity, compositing and mobile ergonomics.
+   No existing theme variables, save keys, systems or artwork are replaced. */
+html,body,#app,#pages,#p-home,#homeStage{overscroll-behavior:none}
+#homeStage{background:linear-gradient(180deg,var(--sky-a) 0%,var(--sky-b) 43%,var(--sky-c) 67%,var(--floor-b) 67%,var(--floor-b) 100%)!important;outline:0;box-shadow:none}
+#homeStage .oc-cam-plane{outline:0;border:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+/* Page slides previously scaled to 98.5%, exposing dark vertical strips around the scene.
+   Crossfade retains a soft transition without visible canvas edges. */
+#pages>.page{transform:none!important;transition:opacity .24s var(--ease),visibility 0s .24s!important}
+#pages>.page.on{transform:none!important;transition-delay:0s!important}
+/* The screen-space backdrop must agree with the camera's world even while zoomed out. */
+#homeStage .oc-cam-plane>.sky{inset:-48% -48%;background:linear-gradient(180deg,var(--sky-a) 0%,var(--sky-a) 24.49%,var(--sky-b) 52.04%,var(--sky-c) 75.51%,var(--sky-c) 100%)}
+#homeStage .oc-cam-plane>.sky::after{content:"";position:absolute;left:0;right:0;top:calc(75.51% - 168px);height:250vh;pointer-events:none;background:linear-gradient(to bottom,var(--floor-a) 0px,var(--floor-b) var(--floor-h),var(--floor-b) 100%)}
+#homeStage.community-world .oc-cam-plane>.sky::after{top:52.04%}
+#homeStage .oc-cam-plane>.shade,#homeStage .oc-cam-plane>.flash{inset:-48% -48%}
+#homeStage .oc-cam-plane>.fog::before{inset:-48% -48%;background:linear-gradient(180deg,var(--fogc,transparent) 0%,var(--fogc,transparent) 24.49%,var(--fogc2,transparent) 75.51%,var(--fogc2,transparent) 100%)}
+#homeStage .oc-cam-plane>.glow{inset:-48% -48%}
+#homeStage .oc-cam-plane>.stars{left:-48%;right:-48%;top:-48%;bottom:-48%}
+#homeStage .oc-cam-plane>.ffly{left:-48%;right:-48%}
+/* Paint over scene floor boundaries with a long, softly matched continuation. */
+#homeStage .oc-cam-plane>.floor{overflow:visible;background:linear-gradient(180deg,var(--floor-a),var(--floor-b) 95%,var(--floor-b))}
+#homeStage .oc-cam-plane>.floor::after{top:88%;height:170vh;left:0;right:0;background:linear-gradient(180deg,transparent 0%,var(--floor-b) 10%,var(--floor-b) 100%)}
+#homeStage .floor>svg{mask-image:linear-gradient(to right,transparent 0%,#000 4%,#000 96%,transparent 100%);-webkit-mask-image:linear-gradient(to right,transparent 0%,#000 4%,#000 96%,transparent 100%)}
+#homeStage .floor>svg.ext[data-side="-1"]{left:calc(-37.21% + 2px);width:calc(58.14% + 2px)}
+#homeStage .floor>svg.ext[data-side="1"]{left:calc(79.07% - 2px);width:calc(58.14% + 2px)}
+#homeStage .oc-cam-plane>.hills-ext[data-side="-1"]{left:calc(-100% + 1px);width:calc(100% + 2px)}
+#homeStage .oc-cam-plane>.hills-ext[data-side="1"]{left:calc(100% - 1px);width:calc(100% + 2px)}
+/* Prevent decorative nodes from introducing accidental visible browser/Android focus edges. */
+#homeStage .oc-cam-plane>*:not(.actor):not(.rm-it):not(.gr-it){outline:none}
+/* A single animation contract for all sheets, including community, resident picker,
+   inventory and item details; no competing translate/scale styles. */
+#layer>.sheet,#layer>.sheet.community-sheet,#layer>.sheet.resident-picker-sheet{
+  transform:translate3d(0,22px,0);opacity:0;
+  transition:transform .28s cubic-bezier(.19,.78,.27,1),opacity .2s ease;
+  max-height:calc(100svh - var(--sat) - 12px);
+  animation:none!important;filter:none;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  box-shadow:0 -14px 38px rgba(19,29,35,.16);pointer-events:none;
+}
+#layer>.sheet.open,#layer>.sheet.community-sheet.open,#layer>.sheet.resident-picker-sheet.open{transform:translate3d(0,0,0);opacity:1;pointer-events:auto}
+#layer>.sheet[data-closing]{transform:translate3d(0,14px,0);opacity:0;pointer-events:none;transition:transform .18s ease-in,opacity .16s ease-in}
+#layer>.sheet>.sh-body,#layer>.sheet .community-panel{scrollbar-gutter:auto;min-height:0;overflow-anchor:none;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+#layer>.sheet.stable-list-sheet{height:min(76svh,700px)}
+#layer>.scrim{transition:opacity .22s ease;backdrop-filter:none;-webkit-backdrop-filter:none}
+#layer>.sheet:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+#layer>.sheet .community-avatar *,#layer>.sheet .thumb *{animation:none!important}
+/* Keep sheet thumbnails, item previews and loading placeholders from reanimating
+   when the surrounding list is updated. Game-world actors remain animated. */
+:is(.bg-card,.bg-item,.c4-card,.furn-choice,.rf-object-row,.resident-pick-list,.community-roster,.srow) :is(img,svg){backface-visibility:hidden;-webkit-backface-visibility:hidden}
+/* Clearer controls: avoid accidental double-tap zoom and inconsistent hit regions. */
+#nav,#nav button,#qaToggle,#camFollow,#homeChip,#qbag,.hud-rail button{touch-action:manipulation}
+#nav .nav-btn{min-width:0;min-height:40px}
+#nav .nav-btn:focus-visible,.cam-follow:focus-visible,.qa-main:focus-visible,#homeChip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#homeChip{border-radius:99px}
+.community-sheet .community-card,.resident-pick-list>button,.furn-choice,.rf-object-row{transition:background-color .16s ease,border-color .16s ease}
+.community-sheet .community-roster{gap:8px}
+.community-sheet .community-card{padding:10px 12px;min-height:82px}
+.community-sheet .community-card b,.resident-pick-list>button{font-size:13px}
+.community-sheet .community-card small{font-size:11px;line-height:1.5}
+.community-sheet .community-avatar,.resident-pick-list .community-avatar{overflow:hidden;flex:none}
+.community-sheet .community-avatar :is(img,svg),.resident-pick-list .community-avatar :is(img,svg){display:block;object-fit:contain}
+.community-sheet .community-join{min-width:48px;padding:0 10px}
+.community-sheet .community-focus{width:40px;flex:none}
+#layer>.sheet .sh-title{letter-spacing:-.015em}
+@media(max-width:375px){
+  .community-sheet .community-card{gap:7px;padding:9px 8px}
+  .community-sheet .community-avatar{width:47px;height:56px}
+  .community-sheet .community-focus{width:36px}
+  .community-sheet .community-join{min-width:43px;padding:0 7px}
+  #layer>.sheet>.sh-body{padding-inline:16px}
+  #nav{left:8px;right:8px}
+}
+@media(orientation:landscape) and (max-height:520px){
+  #layer>.sheet.stable-list-sheet{height:min(90svh,520px)}
+  #layer>.sheet{max-height:calc(100svh - var(--sat) - 6px)}
+  #nav{bottom:calc(var(--sab) + 4px)}
+}
+@media(prefers-reduced-motion:reduce){
+  #homeStage .oc-cam-plane .stars i,#homeStage .oc-cam-plane .ffly i{animation:none!important}
+}
+html[data-motion=reduce] #layer>.sheet,html[data-motion=reduce] #layer>.sheet.community-sheet,html[data-motion=reduce] #layer>.sheet.resident-picker-sheet,
+html[data-motion=reduce] #layer>.scrim{transition:none!important}
